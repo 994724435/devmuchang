@@ -14,6 +14,10 @@ class CommonController extends Controller {
 		}
 		$user = M('user');
 		$result= $user->where(array('name'=>$_SESSION['uname']))->select();
+		if(!$result[0]['manager']){
+            echo "账号已被禁用";
+            exit();
+        }
 		$_SESSION['manager'] =$result[0]['manager'];
 		$this->assign('names',$_SESSION['uname']);
 		$this->assign('manager',$result[0]['manager']);

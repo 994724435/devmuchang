@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 本机
-Source Server Version : 50553
+Source Server         : localhost
+Source Server Version : 50540
 Source Host           : localhost:3306
 Source Database       : devmuchang
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-11-21 21:13:58
+Date: 2017-11-22 22:38:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `p_article`
+-- Table structure for p_article
 -- ----------------------------
 DROP TABLE IF EXISTS `p_article`;
 CREATE TABLE `p_article` (
@@ -39,7 +39,7 @@ INSERT INTO `p_article` VALUES ('6', '分析专家李云龙标题', '2', '1', '2
 INSERT INTO `p_article` VALUES ('7', '公司简介', '2', '1', '2017-11-21 20:37:22', '2017-11-21', 'admin', '1');
 
 -- ----------------------------
--- Table structure for `p_config`
+-- Table structure for p_config
 -- ----------------------------
 DROP TABLE IF EXISTS `p_config`;
 CREATE TABLE `p_config` (
@@ -53,14 +53,14 @@ CREATE TABLE `p_config` (
 -- ----------------------------
 -- Records of p_config
 -- ----------------------------
-INSERT INTO `p_config` VALUES ('1', '结束收益总额', '300', '结束收益');
-INSERT INTO `p_config` VALUES ('2', '每日动态收益', '30', '动态收益');
-INSERT INTO `p_config` VALUES ('3', '推荐奖 1代', '0.05', '1');
-INSERT INTO `p_config` VALUES ('4', '推荐奖 2代', '0.04', '2');
-INSERT INTO `p_config` VALUES ('5', '推荐奖 3代', '0.03', '3');
-INSERT INTO `p_config` VALUES ('6', '推荐奖 4代', '0.02', '4');
-INSERT INTO `p_config` VALUES ('7', '推荐奖 5代', '0.01', '5');
-INSERT INTO `p_config` VALUES ('8', '推荐奖 6代', '0.01', '6');
+INSERT INTO `p_config` VALUES ('1', '结束收益总额', '160', '结束收益');
+INSERT INTO `p_config` VALUES ('2', '每日动态收益', '20', '动态收益');
+INSERT INTO `p_config` VALUES ('3', '幼崽牦牛利率', '0.03', '1');
+INSERT INTO `p_config` VALUES ('4', '成年牦牛利率', '0.04', '2');
+INSERT INTO `p_config` VALUES ('5', '母牦牛利率', '0.05', '3');
+INSERT INTO `p_config` VALUES ('6', '幼崽牦牛基准', '1000', '4');
+INSERT INTO `p_config` VALUES ('7', '成年牦牛基准', '2000', '5');
+INSERT INTO `p_config` VALUES ('8', '母牦牛基准', '3000', '6');
 INSERT INTO `p_config` VALUES ('9', '推荐奖 7代', '0.01', '7');
 INSERT INTO `p_config` VALUES ('10', '推荐奖 8代', '0.01', '8');
 INSERT INTO `p_config` VALUES ('11', '推荐奖 9代', '0.01', '9');
@@ -74,12 +74,12 @@ INSERT INTO `p_config` VALUES ('18', '积分提现手续费', '0.2', '积分提�
 INSERT INTO `p_config` VALUES ('19', '积分转账手续费', '0.10', '动态提现手续费');
 
 -- ----------------------------
--- Table structure for `p_incomelog`
+-- Table structure for p_incomelog
 -- ----------------------------
 DROP TABLE IF EXISTS `p_incomelog`;
 CREATE TABLE `p_incomelog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` int(11) DEFAULT '1' COMMENT '1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9复投码转账 10分红收益 11 动态收益 12挂卖',
+  `type` int(11) DEFAULT '1' COMMENT '1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9复投码转账 10牧场收益 11 幼崽收益 12成年 13母牦牛',
   `state` int(11) DEFAULT '1' COMMENT '1收入   2支出 3失败',
   `reson` varchar(255) DEFAULT NULL COMMENT '原因',
   `addymd` date DEFAULT NULL,
@@ -139,7 +139,7 @@ INSERT INTO `p_incomelog` VALUES ('573', '5', '2', '注册下级', '2017-11-01',
 INSERT INTO `p_incomelog` VALUES ('574', '1', '1', '注册收入', '2017-11-01', '1509542076', '1', '32', '1', '', null, null, '1', null);
 
 -- ----------------------------
--- Table structure for `p_login`
+-- Table structure for p_login
 -- ----------------------------
 DROP TABLE IF EXISTS `p_login`;
 CREATE TABLE `p_login` (
@@ -159,7 +159,7 @@ INSERT INTO `p_login` VALUES ('1', 'admin', '123asd', '2017-09-16', '1505552484'
 INSERT INTO `p_login` VALUES ('2', 'admin', '123asd', '2017-09-16', '1505552539', '127.0.0.1');
 
 -- ----------------------------
--- Table structure for `p_menber`
+-- Table structure for p_menber
 -- ----------------------------
 DROP TABLE IF EXISTS `p_menber`;
 CREATE TABLE `p_menber` (
@@ -210,7 +210,7 @@ INSERT INTO `p_menber` VALUES ('32', 'lifds', '1', '18883257644', null, '1', '0'
 INSERT INTO `p_menber` VALUES ('33', '12', '1', '18883287244', null, '1', '0', '0', '1', '1,33,', '1509542695', '2017-11-01', '1', '0', null, null, null, null, null, null, null, '0', '0', '0');
 
 -- ----------------------------
--- Table structure for `p_message`
+-- Table structure for p_message
 -- ----------------------------
 DROP TABLE IF EXISTS `p_message`;
 CREATE TABLE `p_message` (
@@ -232,7 +232,7 @@ INSERT INTO `p_message` VALUES ('11', 'af814b00d0a1a723cfd2773f998c85c3', '7056'
 INSERT INTO `p_message` VALUES ('12', '6d5975dfcd0b523497d7e09fcbb01003', '2876', '15538867970', null, '1502616778', '2017-08-13', '1');
 
 -- ----------------------------
--- Table structure for `p_orderlog`
+-- Table structure for p_orderlog
 -- ----------------------------
 DROP TABLE IF EXISTS `p_orderlog`;
 CREATE TABLE `p_orderlog` (
@@ -241,15 +241,15 @@ CREATE TABLE `p_orderlog` (
   `productid` int(11) NOT NULL,
   `productname` varchar(64) DEFAULT NULL,
   `productmoney` varchar(32) DEFAULT NULL COMMENT '产品带来的利润',
-  `states` int(1) NOT NULL DEFAULT '0' COMMENT '0待支付 1收益中 2已完成',
+  `state` int(1) NOT NULL DEFAULT '0' COMMENT '0待支付 1收益中 2已完成',
   `orderid` varchar(128) NOT NULL COMMENT '订单id',
   `addtime` int(12) DEFAULT NULL,
   `num` int(5) DEFAULT NULL COMMENT '公排数量 购买数量',
-  `prices` varchar(40) DEFAULT NULL COMMENT '购买单价',
+  `price` varchar(40) DEFAULT NULL COMMENT '购买单价',
   `totals` varchar(40) DEFAULT NULL,
   `addymd` date DEFAULT NULL,
-  `type` int(2) DEFAULT '1' COMMENT '1下单购买MIF  2公排',
-  `option` varchar(1000) DEFAULT NULL COMMENT '公排编号',
+  `type` int(2) DEFAULT '1' COMMENT '1买地  2 1000买幼崽 3 成年5000 4母牦牛10000',
+  `option` varchar(1000) DEFAULT NULL COMMENT '其他说明',
   PRIMARY KEY (`logid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
@@ -259,7 +259,7 @@ CREATE TABLE `p_orderlog` (
 INSERT INTO `p_orderlog` VALUES ('60', '1', '3', '钱付叁号', '200', '1', '1', '1509178426', '1', '200', '200', '2017-10-28', '1', '重庆合成,13649588123,李华,534535353');
 
 -- ----------------------------
--- Table structure for `p_product`
+-- Table structure for p_product
 -- ----------------------------
 DROP TABLE IF EXISTS `p_product`;
 CREATE TABLE `p_product` (
@@ -286,7 +286,7 @@ INSERT INTO `p_product` VALUES ('2', '钱付贰号', '钱付贰号，每日收�
 INSERT INTO `p_product` VALUES ('3', '钱付叁号', '钱付叁号，每日收益投资本金1.2%,连本带利4500元出局，金卡享受一代会员日收益0.9%，直到享受完一代会员投资金额100%，享受二代会员日收益0.7%，直到享受完二代会员投资金额50%。', '/register/Public/Uploads/2017-03-31/58ddce371bfd2.png', '200', '36', '24', '100', '1', '1', '1', '2017-03-31 22:35:54', '0');
 
 -- ----------------------------
--- Table structure for `p_rite`
+-- Table structure for p_rite
 -- ----------------------------
 DROP TABLE IF EXISTS `p_rite`;
 CREATE TABLE `p_rite` (
@@ -315,7 +315,7 @@ INSERT INTO `p_rite` VALUES ('16', '0.3', '08-17');
 INSERT INTO `p_rite` VALUES ('17', '30', '11-01');
 
 -- ----------------------------
--- Table structure for `p_user`
+-- Table structure for p_user
 -- ----------------------------
 DROP TABLE IF EXISTS `p_user`;
 CREATE TABLE `p_user` (
@@ -327,7 +327,7 @@ CREATE TABLE `p_user` (
   `address` varchar(255) DEFAULT NULL COMMENT '微信地址',
   `userface` varchar(255) DEFAULT NULL COMMENT '维信头像',
   `addtime` varchar(255) DEFAULT NULL COMMENT '注册时间',
-  `manager` int(2) DEFAULT '0' COMMENT '0 普通 1管理员 2 超级管理员',
+  `manager` int(2) DEFAULT '1' COMMENT '0 禁用账号 1管理员 2 超级管理员',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
