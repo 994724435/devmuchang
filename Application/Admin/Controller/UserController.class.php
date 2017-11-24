@@ -1,61 +1,69 @@
 <?php
-namespace Admin\Controller;
-use Think\Controller;
-class UserController extends Controller {
 
-    public function qrcode(){
+namespace Admin\Controller;
+
+use Think\Controller;
+
+class UserController extends Controller
+{
+
+    public function qrcode()
+    {
         Vendor('phpqrcode.phpqrcode');
-        $id=I('get.id');
+        $id = I('get.id');
         //生成二维码图片 http://localhost/index.php/Home/Login/reg
         $object = new \QRcode();
-        $url="http://".$_SERVER['HTTP_HOST'].'/index.php/Home/Login/reg/fid/'.$id;
+        $url = "http://" . $_SERVER['HTTP_HOST'] . '/index.php/Home/Login/reg/fid/' . $id;
 
-        $level=3;
-        $size=5;
-        $errorCorrectionLevel =intval($level) ;//容错级别
+        $level = 3;
+        $size = 5;
+        $errorCorrectionLevel = intval($level);//容错级别
         $matrixPointSize = intval($size);//生成图片大小
         $object->png($url, false, $errorCorrectionLevel, $matrixPointSize, 2);
     }
 
-	public function login(){
-        if(IS_POST){
+    public function login()
+    {
+        if (IS_POST) {
             $name = I('post.name');
             $pwd = I('post.pwd');
             $user = M('user');
-            if(!$name || !$pwd){
+            if (!$name || !$pwd) {
                 echo "<script>alert('用户名或密码不存在');";
                 echo "window.history.go(-1);";
                 echo "</script>";
             }
-            $result= $user->where(array('name'=>$name))->select();
-            if($result[0]['password'] ==$pwd){
-                $_SESSION['uname']=$name;
-                echo "<script>window.location.href = '".__ROOT__."/index.php/Admin/Index/main';</script>";
-            }else{
-                    $_SESSION['number']=$_SESSION['number'] +1;
-                    if($_SESSION['number'] > 2){
-                        $user->where(array('name'=>$name))->save(array('manager'=>0));
-                    }
-                    echo "<script>alert('用户名或密码不存在,');";
-                    echo "</script>";
-                    $this->display();
+            $result = $user->where(array('name' => $name))->select();
+            if ($result[0]['password'] == $pwd) {
+                $_SESSION['uname'] = $name;
+                echo "<script>window.location.href = '" . __ROOT__ . "/index.php/Admin/Index/main';</script>";
+            } else {
+                $_SESSION['number'] = $_SESSION['number'] + 1;
+                if ($_SESSION['number'] > 2) {
+                    $user->where(array('name' => $name))->save(array('manager' => 0));
                 }
+                echo "<script>alert('用户名或密码不存在,');";
+                echo "</script>";
+                $this->display();
+            }
         }
         $this->display();
     }
 
-    public function logOut(){
-        session('uname',null);
-        cookie('is_login',null);
-        echo "<script>window.location.href = '".__ROOT__."/index.php/Admin/User/login';</script>";
+    public function logOut()
+    {
+        session('uname', null);
+        cookie('is_login', null);
+        echo "<script>window.location.href = '" . __ROOT__ . "/index.php/Admin/User/login';</script>";
     }
 
     /**
      * 静态收益 ok
      * 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9复投码转账 10分红收益 11 动态收益
      */
-    public function crontab(){  //我的团队
-        $incomelog =M('incomelog');
+    public function crontab()
+    {  //我的团队
+        $incomelog = M('incomelog');
 //        $res = $incomelog->where(array('addymd'=>date('Y-m-d'),'type'=>10))->select();
 //
 //        if($res[0]){
@@ -63,124 +71,183 @@ class UserController extends Controller {
 //        }
         $orderlog = M("orderlog");
         $menber = M("menber");
-        $configobj =M('config')->where(array('id'=>2))->select();
+        $configobj = M('config')->where(array('id' => 2))->select();
 
-        $config3 =M('config')->where(array('id'=>3))->find();
-        $config4 =M('config')->where(array('id'=>4))->find();
-        $config5 =M('config')->where(array('id'=>5))->find();
+        $config3 = M('config')->where(array('id' => 3))->find();
+        $config4 = M('config')->where(array('id' => 4))->find();
+        $config5 = M('config')->where(array('id' => 5))->find();
 
-        $config6 = M('config')->where(array('id'=>6))->find();
-        $config7 = M('config')->where(array('id'=>7))->find();
-        $config8 = M('config')->where(array('id'=>8))->find();
+        $config6 = M('config')->where(array('id' => 6))->find();
+        $config7 = M('config')->where(array('id' => 7))->find();
+        $config8 = M('config')->where(array('id' => 8))->find();
 
-        $config2 =$configobj[0]['value'];
+        $config2 = $configobj[0]['value'];
         $alluser = $menber->select();
-        foreach($alluser as $key=>$val) {
+        foreach ($alluser as $key => $val) {
             // 处理牛的收益
-            $allorders = $orderlog->where(array('userid'=>$val['uid'],'state'=>1,'type'=>1))->select();
-            if($allorders[0]){
+            $allorders = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' => array('GT',1)))->select();
                 $data['state'] = 1;
-                $data['reson'] = "牦牛收益";
                 $data['addymd'] = date('Y-m-d', time());
                 $data['addtime'] = time();
                 $data['userid'] = $val['uid'];
-                foreach ($allorders as $k=>$v){
-                    if($v['type'] ==2){  //幼崽牦牛 1000  11
-                        $data['type'] = 10;
-                        $income =bcmul($config6['value'],$config3['value'],2); // 配置 乘以 利率
-                        $data['income'] = $income;
-                        if($this->isincome($val['userid'],11,$config6['value']) ==1){
-                            $orderlog->where(array('id'=>$val['id']))->save(array('state'=>2));
-                        }else{
-                            $this->addmoney($val['userid'],$income);
-                            $this->savelog($data);
-                        }
+            $allyou = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>2))->select();
+            //幼崽牦牛 1000  11
+            $incomeyou = 0 ;
+             if ($allyou[0]) {
+                 $data['type'] = 10;
+                 $income = bcmul($config6['value'], $config3['value'], 2); // 配置 乘以 利率 每日的收益
+                 $incomes = bcmul($income,count($allyou),2);
+                 $data['income'] = $incomes;
+                 $data['reson'] = "幼崽牦牛收益";
+                 $out =bcmul(1600,count($allyou));  // 出局总数
+                 if ($this->isincome($val['uid'], 11, $out) == 1) {
+                     $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>2))->save(array('state' => 2));
+                 } else {
+                     $incomeyou = $incomes ;
+                     $this->addmoney($val['uid'], $incomes);
+                     $this->savelog($data);
+                 }
+             }
 
-                    }
-
-                    if($v['type'] ==3){  // 成年牦牛  5000  12
-                        $data['type'] = 11;
-                        $income =bcmul($config7['value'],$config4['value'],2); // 配置 乘以 利率
-                        $data['income'] =$income;
-                        if($this->isincome($val['userid'],12,$config7['value']) ==1){
-                            $orderlog->where(array('id'=>$val['id']))->save(array('state'=>2));
-                        }else{
-                            $this->addmoney($val['userid'],$income);
-                            $this->savelog($data);
-                        }
-                    }
-
-                    if($v['type'] ==4){  //母牦牛 10000 13
-                        $data['type'] = 12;
-                        $income =bcmul($config8['value'],$config5['value'],2); // 配置 乘以 利率
-                        $data['income'] =$income;
-                        if($this->isincome($val['userid'],12,$config8['value']) ==1){
-                            $orderlog->where(array('id'=>$val['id']))->save(array('state'=>2));
-                        }else{
-                            $this->addmoney($val['userid'],$income);
-                            $this->savelog($data);
-                        }
-                    }
+            // 成年牦牛  5000  12
+            $incomecheng = 0 ;
+            $allcheng = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>3))->select();
+            if ($allcheng[0]) {
+                $data['type'] = 11;
+                $income = bcmul($config7['value'], $config4['value'], 2); // 配置 乘以 利率
+                $incomes = bcmul($income,count($allyou),2);
+                $data['income'] = $incomes;
+                $data['reson'] = "成年牦牛收益";
+                $out =bcmul(8000,count($allyou));  // 出局总数
+                if ($this->isincome($val['uid'], 12, $out) == 1) {
+                    $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>3))->save(array('state' => 2));
+                } else {
+                    $incomecheng = $incomes ;
+                    $this->addmoney($val['uid'], $incomes);
+                    $this->savelog($data);
                 }
             }
 
-            
+            //母牦牛 10000 13
+            $incomemu = 0 ;
+            $allmu = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>3))->select();
+            if ($allmu[0]) {
+                $data['type'] = 12;
+                $income = bcmul($config8['value'], $config5['value'], 2); // 配置 乘以 利率
+                $incomes = bcmul($income,count($allyou),2);
+                $data['income'] = $incomes;
+                $data['reson'] = "母牦牛收益";
+                $out =bcmul(16000,count($allyou));  // 出局总数
+                if ($this->isincome($val['uid'], 12, $out) == 1) {
+                    $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>4))->save(array('state' => 2));
+                } else {
+                    $incomemu = $incomes ;
+                    $this->addmoney($val['uid'], $incomes);
+                    $this->savelog($data);
+                }
+            }
 
+
+            // 处理地的收益
+            $incomedi = 0 ;
+            $diorder = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' => 1))->select();
+            if($diorder[0]){
                 // 查询是否有收益
-                if($this->getusernums($val['uid'])){
+                if ($this->getusernums($val['uid'])) {
                     continue;
                 }
-
-                $todayincome = bcadd($val['dongbag'],$config2,2);
                 $data['state'] = 1;
                 $data['reson'] = "牧场收益";
                 $data['type'] = 10;
                 $data['addymd'] = date('Y-m-d', time());
                 $data['addtime'] = time();
-                $data['orderid'] =$val['dongbag'];
+                $data['orderid'] = $val['dongbag'];
                 $data['userid'] = $val['uid'];
                 $data['income'] = $config2;
-
                 $todayincome = $config2;
                 if ($todayincome > 0) {
-                    $userinfo = $menber->where(array('uid'=>$val['uid']))->select();
-                    $afterincom = bcadd($userinfo[0]['chargebag'],$todayincome,2);
-                    $menber->where(array('uid'=>$val['uid']))->save(array('chargebag'=>$afterincom));
+                    $incomedi = $todayincome;
+                    $this->addmoney($val['uid'], $todayincome);
                     $this->savelog($data);
+                }
+            }
 
-                    // to du
-                    if($val['fuids'] && $val['fuid']){   // 处理上家
-                        $newstrs = substr($val['fuids'],0,strlen($val['fuids'])-1);
-                        $array =array_reverse(explode(',',$newstrs));
-                        foreach ($array as $k1=>$v1){
-                            if($k1){
-                                $configx =M('config')->where(array('complan'=>$k1))->find();
-                                $data['state'] = 1;
-                                $data['reson'] = "动态收益";
-                                $data['type'] = 11;
-                                $data['addymd'] = date('Y-m-d', time());
-                                $data['addtime'] = time();
-                                $data['orderid'] =$val['uid'];
-                                $data['userid'] = $v1;
-                                $incomesnet =bcmul($configx['value'],$todayincome,2);
-                                $data['income'] = $incomesnet;
-                                if($incomesnet){
-                                    if($this->isshang($v1)){
-                                        continue;
-                                    }
-                                    $userinfos = $menber->where(array('uid'=>$v1))->select();
-                                    $afterincom = bcadd($userinfos[0]['chargebag'],$incomesnet,2);
-                                    $menber->where(array('uid'=>$v1))->save(array('chargebag'=>$afterincom));
-                                     $this->savelog($data);
-                                }
-                            }
-                        }
-                    }
+            // 处理会员回馈奖收益   to du
+            if ($val['fuids'] && $val['fuid']) {   // 处理上家
+                $all1 = bcadd($incomeyou,$incomecheng,2);
+                $all2 = bcadd($all1,$incomemu,2);
+                $allimcomes  = bcadd($all2,$incomedi,2);
+
+                $data['state'] = 1;
+                $data['reson'] = "回馈奖";
+                $data['type'] = 9;
+                $data['addymd'] = date('Y-m-d', time());
+                $data['addtime'] = time();
+                $data['orderid'] = $val['uid'];
+
+                // 一级
+                if($val['fuid']){
+                    $data['income'] =  bcmul($allimcomes,0.04,2);
+                    $data['userid'] = $val['fuid'];
+                    $this->addmoney($val['fuid'], $data['income']);
+                    $this->savelog($data);
+                }
+                // 二级
+                if($val['two']){
+                    $data['income'] =  bcmul($allimcomes,0.03,2);
+                    $data['userid'] = $val['two'];
+                    $this->addmoney($val['two'], $data['income']);
+                    $this->savelog($data);
+                }
+                // 三级
+                if($val['three']){
+                    $data['income'] =  bcmul($allimcomes,0.03,2);
+                    $data['userid'] = $val['three'];
+                    $this->addmoney($val['three'], $data['income']);
+                    $this->savelog($data);
                 }
 
+                // 四级
+                if($val['four']){
+                    $data['income'] =  bcmul($allimcomes,0.01,2);
+                    $data['userid'] = $val['four'];
+                    $this->addmoney($val['four'], $data['income']);
+                    $this->savelog($data);
+                    // 五到八
+                    $fiveinfo = M("menber")->where(array('uid'=>$val['four']))->find();
+                    // 五
+                    if($fiveinfo['fuid']){
+                        $data['income'] =  bcmul($allimcomes,0.01,2);
+                        $data['userid'] =$fiveinfo['fuid'];
+                        $this->addmoney($fiveinfo['fuid'], $data['income']);
+                        $this->savelog($data);
+                    }
+                    // 六
+                    if($fiveinfo['two']){
+                        $data['income'] =  bcmul($allimcomes,0.01,2);
+                        $data['userid'] =$fiveinfo['two'];
+                        $this->addmoney($fiveinfo['two'], $data['income']);
+                        $this->savelog($data);
+                    }
+                    // 七
+                    if($fiveinfo['three']){
+                        $data['income'] =  bcmul($allimcomes,0.01,2);
+                        $data['userid'] =$fiveinfo['three'];
+                        $this->addmoney($fiveinfo['three'], $data['income']);
+                        $this->savelog($data);
+                    }
+                    // 八
+                    if($fiveinfo['four']){
+                        $data['income'] =  bcmul($allimcomes,0.01,2);
+                        $data['userid'] =$fiveinfo['four'];
+                        $this->addmoney($fiveinfo['four'], $data['income']);
+                        $this->savelog($data);
+                    }
+                }
+            }
         }
 
-        echo '成功';
+        echo 'success';
     }
 
     /**
@@ -188,11 +255,12 @@ class UserController extends Controller {
      * @param $uid
      * @param $money
      */
-    private function addmoney($uid,$money){
+    private function addmoney($uid, $money)
+    {
         $menber = M("menber");
-        $userinfos = $menber->where(array('uid'=>$uid))->select();
-        $afterincom = bcadd($userinfos[0]['chargebag'],$money,2);
-        $menber->where(array('uid'=>$uid))->save(array('chargebag'=>$afterincom));
+        $userinfos = $menber->where(array('uid' => $uid))->select();
+        $afterincom = bcadd($userinfos[0]['chargebag'], $money, 2);
+        $menber->where(array('uid' => $uid))->save(array('chargebag' => $afterincom));
     }
 
     /**
@@ -202,25 +270,27 @@ class UserController extends Controller {
      * @return int
      * 每个类型的牛 收益是否到期
      */
-    public function isincome($uid,$type,$out){
-        $daycomelogs = M('incomelog')->where(array('type'=>$type,'userid'=>$uid))->sum('income');
-        if($daycomelogs >= $out){
+    public function isincome($uid, $type, $out)
+    {
+        $daycomelogs = M('incomelog')->where(array('type' => $type, 'userid' => $uid))->sum('income');
+        if ($daycomelogs >= $out) {
             return 1;
         }
-        return 0 ;
+        return 0;
     }
 
     /**
      * @return int 1大于  0小于 没有到上限
      * 每日收益上限
      */
-    public function isshang($uid){
+    public function isshang($uid)
+    {
         // 查询今日收益上线
-        $todayincomeall = M("incomelog")->where(array('userid'=>$uid,'state'=>1,'addymd'=>date('Y-m-d',time())))->sum('income');
-        $config= M("Config")->where(array('id'=>13))->find();
-        if($todayincomeall >= $config[0]['value'] ){
+        $todayincomeall = M("incomelog")->where(array('userid' => $uid, 'state' => 1, 'addymd' => date('Y-m-d', time())))->sum('income');
+        $config = M("Config")->where(array('id' => 13))->find();
+        if ($todayincomeall >= $config[0]['value']) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -229,84 +299,89 @@ class UserController extends Controller {
      * @return int ok
      * 是否有每日收益
      */
-    public function getusernums($userid){
-        $income =M('incomelog');
-        $daycomelogs = $income->where(array('type'=>10,'userid'=>$userid))->sum('income');
-        $conf = M("config")->where(array('id'=>1))->find();
-        if($daycomelogs >= $conf['value']){
+    public function getusernums($userid)
+    {
+        $income = M('incomelog');
+        $daycomelogs = $income->where(array('type' => 10, 'userid' => $userid))->sum('income');
+        $conf = M("config")->where(array('id' => 1))->find();
+        if ($daycomelogs >= $conf['value']) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
 
-    private function savelog($data){
-        $incomelog =M('incomelog');
+    private function savelog($data)
+    {
+        $incomelog = M('incomelog');
         return $incomelog->add($data);
     }
 
 
-    public function crantabUserIncome(){
-        $menber =M('menber');
-        $income =M('incomelog');
-        if($_GET['uid']){
-            $map['uid']  = $_GET['uid'];
-        }else{
-            $map['uid']  = array('gt',9);
+    public function crantabUserIncome()
+    {
+        $menber = M('menber');
+        $income = M('incomelog');
+        if ($_GET['uid']) {
+            $map['uid'] = $_GET['uid'];
+        } else {
+            $map['uid'] = array('gt', 9);
         }
         $result_user = $menber->where($map)->select();
-        foreach($result_user as $k=>$v){
+        foreach ($result_user as $k => $v) {
             $chargebag = $v['chargebag'];
             $incomebag = $v['incomebag'];
-            $allIncome =bcadd($chargebag,$incomebag,2);  // 所有钱包
+            $allIncome = bcadd($chargebag, $incomebag, 2);  // 所有钱包
 
-            $daycomelogs = $income->where(array('state'=>1,'userid'=>$v['uid']))->select();
+            $daycomelogs = $income->where(array('state' => 1, 'userid' => $v['uid']))->select();
             $userIncome = 0;
-            foreach($daycomelogs as $k1=>$v1){         // 收益
-                $userIncome =bcadd($userIncome,$v1['income'],2);
+            foreach ($daycomelogs as $k1 => $v1) {         // 收益
+                $userIncome = bcadd($userIncome, $v1['income'], 2);
             }
-            if($_GET['uid']){
-                print_r("每日收益==》".$userIncome);
+            if ($_GET['uid']) {
+                print_r("每日收益==》" . $userIncome);
             }
-            $dayoutlogs = $income->where(array('state'=>2,'userid'=>$v['uid']))->select();
+            $dayoutlogs = $income->where(array('state' => 2, 'userid' => $v['uid']))->select();
 
             $userOut = 0;                              // 支出
-            foreach($dayoutlogs as $k2=>$v2){
-                $userOut =bcadd($userOut,$v2['income'],2);
+            foreach ($dayoutlogs as $k2 => $v2) {
+                $userOut = bcadd($userOut, $v2['income'], 2);
             }
-            if($_GET['uid']){
-                print_r("<br>总支出==》".$userOut);
+            if ($_GET['uid']) {
+                print_r("<br>总支出==》" . $userOut);
             }
-            $allIncomesUser =bcsub($userIncome,$userOut,2);      // 总收入
-            if($allIncomesUser < 0){
-                print_r("userID".$v['uid']."收入日志异常");
+            $allIncomesUser = bcsub($userIncome, $userOut, 2);      // 总收入
+            if ($allIncomesUser < 0) {
+                print_r("userID" . $v['uid'] . "收入日志异常");
             }
-            $layout =$allIncomesUser-$allIncome;
-            if($layout!=0){
-               print_r("用户ID：".$v['uid']."<br>");
-               print_r("钱包总额：".$allIncome."<br>");
-               print_r("收入总额：".$allIncomesUser."<br><br><br>");
+            $layout = $allIncomesUser - $allIncome;
+            if ($layout != 0) {
+                print_r("用户ID：" . $v['uid'] . "<br>");
+                print_r("钱包总额：" . $allIncome . "<br>");
+                print_r("收入总额：" . $allIncomesUser . "<br><br><br>");
             }
         }
 //        print_r($result_user);die;
     }
 
 
-    function crontabRite(){
-        $today = date('m-d',time());
-        $isdate = M("Rite")->where(array('date'=>$today))->select();
-        if($isdate[0]){
+    function crontabRite()
+    {
+        $today = date('m-d', time());
+        $isdate = M("Rite")->where(array('date' => $today))->select();
+        if ($isdate[0]) {
 //            $config= M("Config")->where(array('name'=>'daily_income'))->select();
 //            M("Rite")->where(array('date'=>$today))->save(array('cont'=>$config[0]['val'],'date'=>$today));
-            echo 2;exit();
-        }else{
-            $config= M("Config")->where(array('id'=>1))->select();
-            M("Rite")->add(array('cont'=>$config[0]['value'],'date'=>$today));
-            echo 1;exit();
+            echo 2;
+            exit();
+        } else {
+            $config = M("Config")->where(array('id' => 1))->select();
+            M("Rite")->add(array('cont' => $config[0]['value'], 'date' => $today));
+            echo 1;
+            exit();
         }
     }
 }
 
 
-
- ?>
+?>

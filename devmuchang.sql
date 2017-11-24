@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50540
+Source Server         : 本机
+Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : devmuchang
 
 Target Server Type    : MYSQL
-Target Server Version : 50540
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-11-22 22:38:22
+Date: 2017-11-24 14:27:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for p_article
+-- Table structure for `p_article`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_article`;
 CREATE TABLE `p_article` (
@@ -39,7 +39,7 @@ INSERT INTO `p_article` VALUES ('6', '分析专家李云龙标题', '2', '1', '2
 INSERT INTO `p_article` VALUES ('7', '公司简介', '2', '1', '2017-11-21 20:37:22', '2017-11-21', 'admin', '1');
 
 -- ----------------------------
--- Table structure for p_config
+-- Table structure for `p_config`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_config`;
 CREATE TABLE `p_config` (
@@ -74,12 +74,12 @@ INSERT INTO `p_config` VALUES ('18', '积分提现手续费', '0.2', '积分提�
 INSERT INTO `p_config` VALUES ('19', '积分转账手续费', '0.10', '动态提现手续费');
 
 -- ----------------------------
--- Table structure for p_incomelog
+-- Table structure for `p_incomelog`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_incomelog`;
 CREATE TABLE `p_incomelog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` int(11) DEFAULT '1' COMMENT '1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9复投码转账 10牧场收益 11 幼崽收益 12成年 13母牦牛',
+  `type` int(11) DEFAULT '1' COMMENT '1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9 回馈奖 10牧场收益 11 幼崽收益 12成年 13母牦牛',
   `state` int(11) DEFAULT '1' COMMENT '1收入   2支出 3失败',
   `reson` varchar(255) DEFAULT NULL COMMENT '原因',
   `addymd` date DEFAULT NULL,
@@ -139,7 +139,7 @@ INSERT INTO `p_incomelog` VALUES ('573', '5', '2', '注册下级', '2017-11-01',
 INSERT INTO `p_incomelog` VALUES ('574', '1', '1', '注册收入', '2017-11-01', '1509542076', '1', '32', '1', '', null, null, '1', null);
 
 -- ----------------------------
--- Table structure for p_login
+-- Table structure for `p_login`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_login`;
 CREATE TABLE `p_login` (
@@ -159,7 +159,7 @@ INSERT INTO `p_login` VALUES ('1', 'admin', '123asd', '2017-09-16', '1505552484'
 INSERT INTO `p_login` VALUES ('2', 'admin', '123asd', '2017-09-16', '1505552539', '127.0.0.1');
 
 -- ----------------------------
--- Table structure for p_menber
+-- Table structure for `p_menber`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_menber`;
 CREATE TABLE `p_menber` (
@@ -173,6 +173,9 @@ CREATE TABLE `p_menber` (
   `jingbag` varchar(50) DEFAULT '0' COMMENT '静态钱包',
   `fuid` int(11) DEFAULT '0' COMMENT '注册上家',
   `fuids` varchar(1000) DEFAULT NULL COMMENT '上家',
+  `two` int(11) DEFAULT '0' COMMENT '二级父类',
+  `three` int(11) DEFAULT '0' COMMENT '三级父类',
+  `four` int(11) DEFAULT '0' COMMENT '四级父类',
   `addtime` int(12) DEFAULT NULL,
   `addymd` date DEFAULT NULL,
   `pwd2` varchar(255) NOT NULL,
@@ -186,31 +189,31 @@ CREATE TABLE `p_menber` (
   `bankfrom` varchar(100) DEFAULT NULL COMMENT '银行卡开户行',
   `mif` int(11) DEFAULT '0' COMMENT '复投码',
   `isdelete` int(1) DEFAULT '0' COMMENT '0 未经用 1禁用',
-  `jifeng` int(11) DEFAULT '0' COMMENT '排位积分',
+  `niuqi` varchar(11) DEFAULT '0' COMMENT '牛气奖',
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_menber
 -- ----------------------------
-INSERT INTO `p_menber` VALUES ('1', '100', '1', '100', null, '1', '5', '0', '0', '1,', null, null, '1', '23.00', 'fsda', '1121', '121', '12121', null, null, null, '2', '0', '30');
-INSERT INTO `p_menber` VALUES ('2', '101', '1', '101', null, '1', '0', '0', '1', '1,2,', '1502892880', '2017-08-16', '1', '881.50', null, null, null, null, null, null, null, '1', '0', '14');
-INSERT INTO `p_menber` VALUES ('3', '102', '1', '102', null, '1', '0', '174', '1', '1,3,', '1502893254', '2017-08-16', '1', '300.00', null, null, null, null, null, null, null, '2', '0', '14');
-INSERT INTO `p_menber` VALUES ('22', '18883287644', '1', '18883287644', null, '1', '0', '0', '3', '1,3,22,', '1508940409', '2017-10-25', '1', '732.40', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('23', '500', '1', '500', null, '1', '0', '0', '1', '1,23,', null, null, '1', '5', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('24', '600', '1', '600', null, '1', '0', '0', '22', '1,3,22,24,', null, null, '1', '5', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('25', '李海龙', '1', '18883287645', null, '1', '1', '0', '1', '1,', '1509173730', '2017-10-28', '1', '250.00', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('26', 'ssd', '1', '18883287647', null, '1', '1', '0', '1', '1,', '1509451820', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('27', '12', '1', '18883247644', null, '1', '1', '0', '1', '1,1,', '1509451971', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('28', '1', '1', '18883187644', null, '1', '1', '0', '1', '1,', '1509452045', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('29', '12', '1', '18883287611', null, '1', '1', '0', '1', '1,29,', '1509452174', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('30', '12', '1', '18883227644', null, '1', '0', '0', '1', '1,30,', '1509452643', '2017-10-31', '1', '100', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('31', 'admin', '1', '18883287624', null, '1', '0', '0', '1', '1,31,', '1509541972', '2017-11-01', '1', '100', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('32', 'lifds', '1', '18883257644', null, '1', '0', '0', '1', '1,32,', '1509542076', '2017-11-01', '1', '100', null, null, null, null, null, null, null, '0', '0', '0');
-INSERT INTO `p_menber` VALUES ('33', '12', '1', '18883287244', null, '1', '0', '0', '1', '1,33,', '1509542695', '2017-11-01', '1', '0', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('1', '100', '1', '100', null, '1', '5', '0', '0', '1,', null, '0', '0', null, null, '1', '23.00', 'fsda', '1121', '121', '12121', null, null, null, '2', '0', '30');
+INSERT INTO `p_menber` VALUES ('2', '101', '1', '101', null, '1', '0', '0', '1', '1,2,', null, '0', '0', '1502892880', '2017-08-16', '1', '881.50', null, null, null, null, null, null, null, '1', '0', '14');
+INSERT INTO `p_menber` VALUES ('3', '102', '1', '102', null, '1', '0', '174', '1', '1,3,', null, '0', '0', '1502893254', '2017-08-16', '1', '300.00', null, null, null, null, null, null, null, '2', '0', '14');
+INSERT INTO `p_menber` VALUES ('22', '18883287644', '1', '18883287644', null, '1', '0', '0', '3', '1,3,22,', null, '0', '0', '1508940409', '2017-10-25', '1', '732.40', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('23', '500', '1', '500', null, '1', '0', '0', '1', '1,23,', null, '0', '0', null, null, '1', '5', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('24', '600', '1', '600', null, '1', '0', '0', '22', '1,3,22,24,', null, '0', '0', null, null, '1', '5', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('25', '李海龙', '1', '18883287645', null, '1', '1', '0', '1', '1,', null, '0', '0', '1509173730', '2017-10-28', '1', '250.00', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('26', 'ssd', '1', '18883287647', null, '1', '1', '0', '1', '1,', null, '0', '0', '1509451820', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('27', '12', '1', '18883247644', null, '1', '1', '0', '1', '1,1,', null, '0', '0', '1509451971', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('28', '1', '1', '18883187644', null, '1', '1', '0', '1', '1,', null, '0', '0', '1509452045', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('29', '12', '1', '18883287611', null, '1', '1', '0', '1', '1,29,', null, '0', '0', '1509452174', '2017-10-31', '1', '40.00', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('30', '12', '1', '18883227644', null, '1', '0', '0', '1', '1,30,', null, '0', '0', '1509452643', '2017-10-31', '1', '100', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('31', 'admin', '1', '18883287624', null, '1', '0', '0', '1', '1,31,', null, '0', '0', '1509541972', '2017-11-01', '1', '100', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('32', 'lifds', '1', '18883257644', null, '1', '0', '0', '1', '1,32,', null, '0', '0', '1509542076', '2017-11-01', '1', '100', null, null, null, null, null, null, null, '0', '0', '0');
+INSERT INTO `p_menber` VALUES ('33', '12', '1', '18883287244', null, '1', '0', '0', '1', '1,33,', null, '0', '0', '1509542695', '2017-11-01', '1', '0', null, null, null, null, null, null, null, '0', '0', '0');
 
 -- ----------------------------
--- Table structure for p_message
+-- Table structure for `p_message`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_message`;
 CREATE TABLE `p_message` (
@@ -232,7 +235,7 @@ INSERT INTO `p_message` VALUES ('11', 'af814b00d0a1a723cfd2773f998c85c3', '7056'
 INSERT INTO `p_message` VALUES ('12', '6d5975dfcd0b523497d7e09fcbb01003', '2876', '15538867970', null, '1502616778', '2017-08-13', '1');
 
 -- ----------------------------
--- Table structure for p_orderlog
+-- Table structure for `p_orderlog`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_orderlog`;
 CREATE TABLE `p_orderlog` (
@@ -259,7 +262,7 @@ CREATE TABLE `p_orderlog` (
 INSERT INTO `p_orderlog` VALUES ('60', '1', '3', '钱付叁号', '200', '1', '1', '1509178426', '1', '200', '200', '2017-10-28', '1', '重庆合成,13649588123,李华,534535353');
 
 -- ----------------------------
--- Table structure for p_product
+-- Table structure for `p_product`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_product`;
 CREATE TABLE `p_product` (
@@ -286,7 +289,7 @@ INSERT INTO `p_product` VALUES ('2', '钱付贰号', '钱付贰号，每日收�
 INSERT INTO `p_product` VALUES ('3', '钱付叁号', '钱付叁号，每日收益投资本金1.2%,连本带利4500元出局，金卡享受一代会员日收益0.9%，直到享受完一代会员投资金额100%，享受二代会员日收益0.7%，直到享受完二代会员投资金额50%。', '/register/Public/Uploads/2017-03-31/58ddce371bfd2.png', '200', '36', '24', '100', '1', '1', '1', '2017-03-31 22:35:54', '0');
 
 -- ----------------------------
--- Table structure for p_rite
+-- Table structure for `p_rite`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_rite`;
 CREATE TABLE `p_rite` (
@@ -315,7 +318,7 @@ INSERT INTO `p_rite` VALUES ('16', '0.3', '08-17');
 INSERT INTO `p_rite` VALUES ('17', '30', '11-01');
 
 -- ----------------------------
--- Table structure for p_user
+-- Table structure for `p_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `p_user`;
 CREATE TABLE `p_user` (
