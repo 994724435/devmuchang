@@ -18,37 +18,19 @@
        /* .oxen{position: relative;} */
        .niu1{width: 1.5rem;
         position: absolute;
-        top: 5rem;
-        left: 1rem;}
+        top: 5.3rem;
+        left: 2rem;}
         .niu2{
-        width: 1.8rem;
+        width: 2rem;
         position: absolute;
-        top: 4.7rem;
-        left: 3rem;
+        top: 5.6rem;
+        left: 5rem;
        }
         .niu3{
-        width: 1.5rem;
+        width: 1.7rem;
         position: absolute;
-        top: 6rem;
-        left: 3rem;
-       }
-       .niu4{
-        width: 1.2rem;
-        position: absolute;
-        top: 7.3rem;
-        left: 4rem;
-       }
-       .niu5{
-            width: 1.3rem;
-            position: absolute;
-            top: 5.3rem;
-            left: 5.4rem;
-       }
-       .niu6{
-            width: 1.3rem;
-            position: absolute;
-            top: 6.5rem;
-            left: 5.4rem;
+        top: 7rem;
+        left: 3.8rem;
        }
        .oxen img{display: block;width: 100%;}
        .oxen span{display: inline-block;padding: 0 .2rem;background: #fff;color: #333;
@@ -73,22 +55,9 @@
             <span>300</span>
         </div>
         <div class="oxen niu3">
-            <img src="img/3.png" alt="">
-            <span>300</span>
-        </div>
-        <div class="oxen niu4">
-            <img src="img/4.png" alt="">
-            <span>300</span>
-        </div>
-        <div class="oxen niu5">
             <img src="img/5.png" alt="">
             <span>300</span>
         </div>
-        <div class="oxen niu6">
-            <img src="img/6.png" alt="">
-            <span>300</span>
-        </div>
-       
     </div>
     <!-- 中间七头牛 -->
 	<!-- 耗牛申请 -->
@@ -102,9 +71,17 @@
             </div>
             <ul class="maskList scroll_table">
                 <li>
+                    <img src="img/land1.png" alt="">
+                    <ul>
+                        <li>牧场</li>
+                        <li>￥100.00</li>
+                    </ul>
+                    <span class="buySpan" data-money="100" data-id="4">购买</span>
+                </li>
+                <li>
                     <img src="img/1.png" alt="">
                     <ul>
-                        <li>小耗牛</li>
+                        <li>幼崽牦牛</li>
                         <li>￥100.00</li>
                     </ul>
                     <span class="buySpan" data-money="100" data-id="1">购买</span>
@@ -112,19 +89,20 @@
                 <li>
                     <img src="img/2.png" alt="">
                     <ul>
-                        <li>小耗牛</li>
+                        <li>母耗牛</li>
                         <li>￥100.00</li>
                     </ul>
-                    <span class="buySpan" data-money="100" data-id="1">购买</span>
+                    <span class="buySpan" data-money="100" data-id="2">购买</span>
                 </li>
                 <li>
                     <img src="img/3.png" alt="">
                     <ul>
-                        <li>小耗牛</li>
+                        <li>黑耗牛</li>
                         <li>￥100.00</li>
                     </ul>
-                    <span class="buySpan" data-money="100" data-id="1">购买</span>
+                    <span class="buySpan" data-money="100" data-id="3">购买</span>
                 </li>
+                
             </ul>
         </div>
     </div>
@@ -169,26 +147,6 @@
                         <span class="main_com_li_left">购买数量:</span>
                         <input type="number" name="" value="1" id="buy_num">
                     </li>  
-                 </ul>
-                 <button type="button" class="shippAddress">填写收货地址</button>
-                 <button type="button" class="confirm">确认购买</button>
-            </form>
-        </div>
-        <!-- 购买弹窗end -->
-        
-        <!-- 收货地址弹窗 -->
-        <div class="maskContent hidden" id="adressMask">
-            <div class="main_pop_head">
-                <img src="img/return.png" alt="" class="returnImg">
-                <span>填写收货地址</span>
-                <img src="img/x.png" alt="" class="closeImg">
-            </div>
-            <form action="" class="scroll_table">
-                  <input type="hidden" id="goodsMoney1">
-                  <input type="hidden" id="goodsId1">
-                  <input type="hidden" id="kucun1">
-                  <input type="hidden" id="buy_num1">
-                 <ul>
                     <li class="main_com_li">
                         <span class="main_com_li_left">收货人地址:</span>
                         <input type="text" name="">
@@ -202,19 +160,15 @@
                         <input type="text" name=""">
                     </li> 
                     <li class="main_com_li">
-                        <span class="main_com_li_left">当前运费:</span>
-                        <input type="text" name="" value="5" disabled="disabled">
-                    </li>   
-                    <li class="main_com_li">
                         <span class="main_com_li_left">邮编:</span>
                         <input type="text" name="">
                     </li>
                  </ul>
-                 
-                 <button type="button" class="confirm">确认购买</button>
+
+                 <button type="submit" class="confirm">确认购买</button>
             </form>
-       </div>
-        <!-- 收货地址弹窗end -->
+        </div>
+        <!-- 购买弹窗end -->
     </div>
     <!-- 商店弹窗end -->
    
