@@ -5,6 +5,82 @@ use Think\Controller;
 header('content-type:text/html;charset=utf-8');
 class UserController extends CommonController{
 
+    public function popularize(){
+        $url = "http://".$_SERVER['SERVER_NAME']."/index.php/Home/Login/reg/fid/".session('uid').".html";
+        $this->assign('url',$url);
+        $this->display();
+    }
+
+    /**
+     * 公司简介
+     */
+    public function intro(){
+        $article = M('article')->where(array('aid'=>1))->find();
+        $this->assign('res',$article);
+        $this->display();
+    }
+
+    /**
+     * 文章详情
+     */
+    public function notice_detail(){
+        $article = M('article')->where(array('aid'=>$_GET['id']))->find();
+        $this->assign('res',$article);
+        $this->display();
+    }
+
+    /**
+     * 文章列表
+     */
+    public function notice(){
+        $article = M('article')->where(array('type'=>2))->order('aid DESC')->select();
+        $this->assign('res',$article);
+        $this->display();
+    }
+
+
+    public function my(){
+        $menber =M("menber");
+        $userinfo =$menber->where(array('uid'=>session('uid')))->find();
+        $orderlog = M("orderlog")->where(array('userid'=>session('uid'),'type'=>10))->order('logid DESC')->find();
+        // to du
+        if($orderlog['logid']){
+            if($orderlog['state']==1){
+                $msg = "未发货";
+            }else{
+                $msg = "已发货";
+            }
+        }else{
+            $msg = "暂无信息";
+        }
+        $con['userid'] =session('uid');
+        $con['type'] = array('in','2,3,4');
+        $con['state'] =1;
+        $niu =M("orderlog")->where($con)->count();
+
+        //总金币
+        $income =M("orderlog")->where($con)->sum('price');
+        $allfan =$income * 1.6;
+
+        // 已返回总金币
+        $map['userid'] =session('uid');
+        $map['type'] = array('in','10,11,12,13');
+        $map['state'] =1;
+       $incomes = (float)M("incomelog")->where($map)->sum('income');
+
+        //剩下没返回的
+        $left =bcsub ($allfan,$incomes,2);
+
+        $this->assign('allfan',$allfan);
+        $this->assign('incomes',$incomes);
+        $this->assign('left',$left);
+        $this->assign('niu',$niu);
+        $this->assign('msg',$msg);
+        $this->display();
+    }
+
+
+
     public function sale_buy(){
         if(!$_GET['id']){
             echo "<script>alert('ID异常');";
@@ -49,193 +125,6 @@ class UserController extends CommonController{
         exit;
     }
 
-    // state 0 出售中   4 已购买
-    public function buy(){
-        if(!$_GET['id']){
-            echo "<script>alert('ID异常');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/sale_list';";
-            echo "</script>";
-            exit;
-        }
-        $incomelog =M("incomelog")->where(array('id'=>$_GET['id']))->find();
-        if(session('uid')==$incomelog['userid']){
-            echo "<script>alert('不能购买自己的挂买');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/sale_list';";
-            echo "</script>";
-            exit;
-        }
-        $userinfo =M("menber")->where(array('uid'=>session('uid')))->find();
-        $logid =$incomelog['id'];
-        $commitid =date('YmdHis').rand(100,999);
-        M("incomelog")->where(array('id'=>$_GET['id']))->save(array('commitid'=>$commitid,'state'=>4));
-        unset($incomelog['id']);
-        $incomelog['userid'] =session('uid');
-//        $incomelog['tel'] =$userinfo['tel'];
-//        $incomelog['weixin'] =$userinfo['weixin'];
-//        $incomelog['username'] =$userinfo['name'];
-        $incomelog['state'] =4;
-        $incomelog['orderid'] =2;
-        $incomelog['commitid'] =$commitid;
-        M("incomelog")->add($incomelog);
-
-        echo "<script>alert('操作成功，请联系卖家');";
-        echo "window.location.href='".__ROOT__."/index.php/Home/User/sale_list';";
-        echo "</script>";
-        exit;
-
-    }
-
-    public function sale_list(){
-        $data['type'] =12;
-        $data['state'] =0;
-        $data['commitid'] =0;
-        $list =M("incomelog")->where($data)->select();
-
-        //交易中数据
-        $con['type'] =12;
-        $con['state'] =array('in',array(4,5,6));
-        $con['userid'] =session('uid');
-        $listing = M("incomelog")->where($con)->select();
-        $this->assign('listing',$listing);
-        $this->assign('res',$list);
-        $this->display();
-    }
-
-    // 售卖
-    public function my_sale(){
-        if($_POST['income']){
-
-            foreach ($_POST as $v){
-                if(!$v){
-                    echo "<script>alert('请填写完整');";
-                    echo "window.location.href='".__ROOT__."/index.php/Home/User/my_sale';";
-                    echo "</script>";
-                    exit;
-                }
-            }
-
-            if($_POST['income']% 10 != 0){
-                echo "<script>alert('数量需为10的整数倍');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/my_sale';";
-                echo "</script>";
-                exit;
-            }
-
-            $menber = M("menber");
-            $userinfo = $menber->where(array('uid'=>session('uid')))->select();
-
-            $lilv = 0.1;
-            $fei= bcmul($_POST['income'],$lilv,2);
-            $allresult = bcadd($_POST['income'],$fei,2);
-            if($userinfo[0]['chargebag'] < $allresult){
-                echo "<script>alert('积分不足');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
-                echo "</script>";
-                exit;
-            }
-            $left = bcsub($userinfo[0]['chargebag'],$_POST['income'],2);
-            $left = bcsub($left,$fei,2);
-            $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$left));
-            $data =$_POST;
-            $data['type'] =12;
-            $data['state'] =0;
-            $data['reson'] ='积分挂买';
-            $data['addymd'] =date('Y-m-d',time());
-            $data['addtime'] =time();
-            $data['orderid'] =1;
-            $data['userid'] =session('uid');
-            $data['commitid']='';
-            $data['income']=$_POST['income'];
-            M("incomelog")->add($data);
-            echo "<script>alert('挂买成功');";
-            echo "window.location.href='".__ROOT__."/index.php/Home/User/sale_list';";
-            echo "</script>";
-            exit;
-        }
-        $this->display();
-    }
-
-    public function test(){
-        $uid =1;
-        $str = $this->get_category($uid,1);
-        $newstr = substr($str,0,strlen($str)-1);
-        $nextuser = M("menber")->where(array('uid'=>array('in',$newstr)))->select();
-        if($nextuser[0]){
-            foreach ($nextuser as $key=>$value){
-                if($value['uid'] ==$uid){
-                    continue;
-                }
-                if($value['fuids']){
-                    $newstrs = substr($value['fuids'],0,strlen($value['fuids'])-1);
-                    $array =array_reverse(explode(',',$newstrs));
-                    foreach ($array as $k1=>$v1){
-                        if($v1 == $uid){
-                           $temp[$k1][]  =$value;
-                        }
-                    }
-                }
-
-            }
-        }
-
-        print_r($temp);die;
-        print_r($nextuser);
-        die;
-    }
-
-    //获取指定分类的所有子分类 键为ID，值为分类名
-    function getCateKv($categoryID)
-    {
-        //初始化ID数组,赋值当前分类
-        $array[] = M('cate')->where("id={$categoryID}")->getField("cateName");
-        do
-        {
-            $ids = '';
-            $where['pid'] = array('in',$categoryID);
-            $cate = M('cate')->where($where)->select();
-            echo M('cate')->_sql();
-            foreach ($cate as $k=>$v)
-            {
-                $array[$v['id']] = $v['cateName'];
-                $ids .= ',' . $v['id'];
-            }
-            $ids = substr($ids, 1, strlen($ids));
-            $categoryID = $ids;
-        }
-        while (!empty($cate));
-        $ids = implode(',', $array);
-
-        //return $ids; //  返回字符串
-        return $array; //返回数组
-    }
-
-
-
-    function get_category( $category_id ,$level){
-        $category_ids = $category_id.",";
-        $child_category =M("menber")->where(array('fuid'=>$category_id))->select();
-        $levels =$level+1;
-//        print_r($level);
-        foreach( $child_category as $key => $val ){
-            $item[$val['uid']]=$child_category[$key];
-            $category_ids .=$this->get_category( $val["uid"],$levels);
-        }
-        return $category_ids;
-    }
-
-//获取某个分类的所有子分类
-    function getSubs($categorys,$catId=0,$level=1){
-        $subs=array();
-        foreach($categorys as $item){
-             M("menber")->where(array('uid'=>1))->find();
-            if($item['uid']==$catId){
-                $item['level']=$level;
-                $subs[]=$item;
-                $subs=array_merge($subs,getSubs($categorys,$item['fuid'],$level+1));
-            }
-        }
-        return $subs;
-    }
 
     public function reg(){  //注册下级
         if($_POST['tel']&&$_POST['pwd']){
@@ -374,47 +263,8 @@ class UserController extends CommonController{
     }
 
 
-    public function popularize(){
-        $url = "http://366757.ouyouhui.com"."/index.php/Home/Login/reg/fid/".session('uid').".html";
-        $this->assign('url',$url);
-        $this->display();
-    }
 
-    public function notice_detail(){
-        $article = M('article')->where(array('aid'=>$_GET['id']))->find();
-        $this->assign('res',$article);
-        $this->display();
-    }
 
-    public function notice(){
-        $article = M('article')->select();
-        $this->assign('res',$article);
-        $this->display();
-    }
-
-    public function my(){
-        $menber =M("menber");
-        $userinfo =$menber->where(array('uid'=>session('uid')))->find();
-        $orderlog = M("orderlog")->where(array('userid'=>session('uid')))->find();
-        if($orderlog['logid']){
-            if($orderlog['states']==1){
-                $msg = "未发货";
-            }else{
-                $msg = "已发货";
-            }
-        }else{
-            $msg = "暂无信息";
-        }
-        if($userinfo['fuid']){
-            $fid = $menber->where(array('uid'=>$userinfo['fuid']))->find();
-            $fuidname = $fid['name'];
-        }else{
-            $fuidname= "暂无";
-        }
-        $this->assign('fuidname',$fuidname);
-        $this->assign('msg',$msg);
-        $this->display();
-    }
 
     /*
      * 积分充值
@@ -510,7 +360,7 @@ class UserController extends CommonController{
     }
 
     /*
-    * 退本 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分提现 8静态转账 9动态转账 10静态收益 11 动态收益
+    * 1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9 回馈奖 10牧场收益 11 幼崽收益 12成年 13母牦牛
      */
     public function width_draw(){
         $lilv =  M("config")->where(array('id'=>18))->find();
@@ -531,28 +381,29 @@ class UserController extends CommonController{
                 exit;
             }
 
-            if($_POST['num'] <100){
-                echo "<script>alert('提现额度小于100');";
+//            if($_POST['num'] <100){
+//                echo "<script>alert('提现额度小于100');";
+//                echo "window.location.href='".__ROOT__."/index.php/Home/User/width_draw';";
+//                echo "</script>";
+//                exit;
+//            }
+
+            $max = M("config")->where(array('id'=>19))->find();
+            if($_POST['num'] > $max['value']){
+                echo "<script>alert('提现额度大于".$max['value']."');";
                 echo "window.location.href='".__ROOT__."/index.php/Home/User/width_draw';";
                 echo "</script>";
                 exit;
             }
 
-            if($_POST['num'] > 200){
-                echo "<script>alert('提现额度大于200');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/width_draw';";
-                echo "</script>";
-                exit;
-            }
-
-            $income =M('incomelog');
-            $istoday =$income->where(array('type'=>7,'userid'=>session('uid'),'addymd'=>date('Y-m-d',time())))->find();
-            if($istoday['userid']){
-                echo "<script>alert('每日提现允许一次');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/User/width_draw';";
-                echo "</script>";
-                exit;
-            }
+//            $income =M('incomelog');
+//            $istoday =$income->where(array('type'=>7,'userid'=>session('uid'),'addymd'=>date('Y-m-d',time())))->find();
+//            if($istoday['userid']){
+//                echo "<script>alert('每日提现允许一次');";
+//                echo "window.location.href='".__ROOT__."/index.php/Home/User/width_draw';";
+//                echo "</script>";
+//                exit;
+//            }
 
             $left = bcsub($res_user[0]['chargebag'],$_POST['num'],2);
 
@@ -565,14 +416,14 @@ class UserController extends CommonController{
                     $income =M('incomelog');
                     $data['type'] =7;
                     $data['state'] =0;
-                    $data['reson'] ='积分提现';
+                    $data['reson'] ='余额提现';
                     $data['addymd'] =date('Y-m-d',time());
                     $data['addtime'] =time();
                     $data['orderid'] =session('uid');
                     $data['userid'] =session('uid');
                     $data['income'] =$_POST['num'];
                     $income->add($data);
-                    $resreson ="积分提现".$_POST['num']."元";
+                    $resreson ="提现".$_POST['num']."元";
                     echo "<script>alert('".$resreson."待管理员确认');";
                     echo "window.location.href='".__ROOT__."/index.php/Home/User/my';";
                     echo "</script>";

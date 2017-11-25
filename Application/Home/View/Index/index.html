@@ -224,16 +224,22 @@
 				   		<td>下线级别</td>
 				   		<td>注册时间</td>
 				   	</tr>
-				   	<tr>
-				   		<td>15538867970</td>
-				   		<td>一级下线</td>
-				   		<td>2015-3-3 12:00:00</td>
-				   	</tr>
-				   	<tr>
-				   		<td>15538867970</td>
-				   		<td>一级下线</td>
-				   		<td>2015-3-3 12:00:00</td>
-				   	</tr>
+                    <foreach name="userlist" item='v' key="k">
+                        <foreach name="v" item='v1'>
+                            <tr>
+                                <td>{$v1.tel}</td>
+                                <td>
+<?php if($k==0){echo '一';}else if($k==1){echo '二';}else if($k==2){echo '三';}else if($k==3){echo '四';}else if($k==4){echo '五';}else if($k==5){echo '六';}else if($k==6){echo '七';}else if($k==7){echo '八';} ?>
+                                    级下线</td>
+                                <td><?php echo date("Y-m-d H:i:s",$v1['addtime']); ?></td>
+                            </tr>
+                        </foreach>
+                    </foreach>
+				   	<!--<tr>-->
+				   		<!--<td>15538867970</td>-->
+				   		<!--<td>一级下线</td>-->
+				   		<!--<td>2015-3-3 12:00:00</td>-->
+				   	<!--</tr>-->
 			    </table>
 		    </div>
 	    </div>
@@ -278,7 +284,7 @@
 		<li><img src="__ROOT__/Public/Home/img/12.png" alt=""  id="open_shop"></li>
 		<li><img src="__ROOT__/Public/Home/img/15.png" alt="" id="open_group"></li>
 		<li><img src="__ROOT__/Public/Home/img/7.png" alt="" id="open_detail"></li>
-		<li><img src="__ROOT__/Public/Home/img/8.png" alt="" onclick="location.href='my.html'"></li>
+		<li><img src="__ROOT__/Public/Home/img/8.png" alt="" onclick="location.href='__ROOT__/index.php/Home/User/my.html'"></li>
 	</ul>
 </body>
 </html>

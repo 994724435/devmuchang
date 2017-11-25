@@ -45,7 +45,7 @@ class ArticleController extends CommonController {
     public function editearticle(){
         $article =M('article');
         if($_POST['title']){
-            $data['type'] =$_POST['type'];
+//            $data['type'] =$_POST['type'];
             $data['title'] =$_POST['title'];
             $data['cont'] =$_POST['content1'];
             $data['addtime'] =date('Y-m-d H:i:s');

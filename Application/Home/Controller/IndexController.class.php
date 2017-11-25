@@ -20,16 +20,37 @@ class IndexController extends CommonController {
         $you = M("orderlog")->where(array('userid'=>session('uid'),'state'=>1,'type'=>2))->count();
         $hei = M("orderlog")->where(array('userid'=>session('uid'),'state'=>1,'type'=>3))->count();
         $mu = M("orderlog")->where(array('userid'=>session('uid'),'state'=>1,'type'=>4))->count();
-        $income = M("incomelog")->where(array('userid'=>session('uid')))->select();
+        $income = M("incomelog")->where(array('userid'=>session('uid')))->order('id DESC')->select();
 
         $this->assign('you',$you);
         $this->assign('hei',$hei);
         $this->assign('mu',$mu);
 		$this->assign('list',$prolist);
         $this->assign('income',$income);
+        $this->assign('userlist',$this->getuser(session('uid')));
 		$this->display();
 	}
-
+    private function getuser($uid){
+        $user =array();
+        $member = M("menber");
+        for ($i=0;$i<=7;$i++){
+            if($i == 0){
+                $user[0] =$member->field('uid,tel,name,fuids,addtime,addymd')->where(array('fuid'=>$uid))->select();
+            }else{
+                if($user[$i-1]){
+                    $array =array();
+                    foreach ($user[$i-1] as $k=>$v){
+                        $temp= $member->field('uid,tel,name,fuids,addtime,addymd')->where(array('fuid'=>$v['uid']))->select();
+                        foreach ($temp as $v1){
+                            array_push($array,$v1);
+                        }
+                    }
+                    $user[$i] =$array;
+                }
+            }
+        }
+        return $user;
+    }
 	private function getniuinfo($id){
 	    if($id ==1){
 	        return array('name'=>'地','price'=>100,'type'=>1,'num'=>1);

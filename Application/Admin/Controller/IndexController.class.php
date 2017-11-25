@@ -5,7 +5,7 @@ use Think\Controller;
 header('content-type:text/html;charset=utf-8');
 class IndexController extends CommonController {
 	public function comproduct(){
-	    M("orderlog")->where(array('logid'=>$_GET['id']))->save(array('states'=>2));
+	    M("orderlog")->where(array('logid'=>$_GET['id']))->save(array('state'=>2));
         echo "<script>alert('修改成功');window.location.href = '".__ROOT__."/index.php/Admin/Index/select';</script>";
         exit();
     }
@@ -146,7 +146,7 @@ class IndexController extends CommonController {
         $orderlog = M('orderlog');
         if($_GET['state']){
 //            $map['name']=array('like','%'.$_GET['name'].'%');
-            $map['states'] =$_GET['state'];
+            $map['state'] =$_GET['state'];
         }
         if($_GET['uid']){
             $map['userid'] =$_GET['uid'];
@@ -154,7 +154,8 @@ class IndexController extends CommonController {
         if($_GET['orderid']){
             $map['orderid'] =$_GET['orderid'];
         }
-        $users= $orderlog->where($map)->select();
+        $map['type'] =10;
+        $users= $orderlog->where($map)->order('logid DESC')->select();
 
         $this->assign('users',$users);
         $this->display();

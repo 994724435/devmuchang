@@ -91,7 +91,7 @@ class UserController extends Controller
                 $data['addtime'] = time();
                 $data['userid'] = $val['uid'];
             $allyou = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>2))->select();
-            //幼崽牦牛 1000  11
+            //幼崽牦牛 1000     ok
             $incomeyou = 0 ;
              if ($allyou[0]) {
                  $data['type'] = 10;
@@ -115,10 +115,10 @@ class UserController extends Controller
             if ($allcheng[0]) {
                 $data['type'] = 11;
                 $income = bcmul($config7['value'], $config4['value'], 2); // 配置 乘以 利率
-                $incomes = bcmul($income,count($allyou),2);
+                $incomes = bcmul($income,count($allcheng),2);
                 $data['income'] = $incomes;
-                $data['reson'] = "成年牦牛收益";
-                $out =bcmul(8000,count($allyou));  // 出局总数
+                $data['reson'] = "黑牦牛收益";
+                $out =bcmul(8000,count($allcheng));  // 出局总数
                 if ($this->isincome($val['uid'], 12, $out) == 1) {
                     $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>3))->save(array('state' => 2));
                 } else {
@@ -130,14 +130,14 @@ class UserController extends Controller
 
             //母牦牛 10000 13
             $incomemu = 0 ;
-            $allmu = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>3))->select();
+            $allmu = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>4))->select();
             if ($allmu[0]) {
                 $data['type'] = 12;
                 $income = bcmul($config8['value'], $config5['value'], 2); // 配置 乘以 利率
-                $incomes = bcmul($income,count($allyou),2);
+                $incomes = bcmul($income,count($allmu),2);
                 $data['income'] = $incomes;
                 $data['reson'] = "母牦牛收益";
-                $out =bcmul(16000,count($allyou));  // 出局总数
+                $out =bcmul(16000,count($allmu));  // 出局总数
                 if ($this->isincome($val['uid'], 12, $out) == 1) {
                     $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' =>4))->save(array('state' => 2));
                 } else {
@@ -147,32 +147,31 @@ class UserController extends Controller
                 }
             }
 
-
             // 处理地的收益
             $incomedi = 0 ;
             $diorder = $orderlog->where(array('userid' => $val['uid'], 'state' => 1, 'type' => 1))->select();
             if($diorder[0]){
                 // 查询是否有收益
-                if ($this->getusernums($val['uid'])) {
-                    continue;
-                }
-                $data['state'] = 1;
-                $data['reson'] = "牧场收益";
-                $data['type'] = 10;
-                $data['addymd'] = date('Y-m-d', time());
-                $data['addtime'] = time();
-                $data['orderid'] = $val['dongbag'];
-                $data['userid'] = $val['uid'];
-                $data['income'] = $config2;
-                $todayincome = $config2;
-                if ($todayincome > 0) {
-                    $incomedi = $todayincome;
-                    $this->addmoney($val['uid'], $todayincome);
-                    $this->savelog($data);
+                if ($this->getusernums($val['uid']) == 0) {
+                    $data['state'] = 1;
+                    $data['reson'] = "牧场收益";
+                    $data['type'] = 10;
+                    $data['addymd'] = date('Y-m-d', time());
+                    $data['addtime'] = time();
+                    $data['orderid'] = $val['dongbag'];
+                    $data['userid'] = $val['uid'];
+                    $data['income'] = $config2;
+                    $todayincome = $config2;
+                    if ($todayincome > 0) {
+                        $incomedi = $todayincome;
+                        $this->addmoney($val['uid'], $todayincome);
+                        $this->savelog($data);
+                    }
                 }
             }
 
-            // 处理会员回馈奖收益   to du
+
+            // 处理会员回馈奖收益
             if ($val['fuids'] && $val['fuid']) {   // 处理上家
                 $all1 = bcadd($incomeyou,$incomecheng,2);
                 $all2 = bcadd($all1,$incomemu,2);
@@ -189,65 +188,127 @@ class UserController extends Controller
                 if($val['fuid']){
                     $data['income'] =  bcmul($allimcomes,0.04,2);
                     $data['userid'] = $val['fuid'];
-                    $this->addmoney($val['fuid'], $data['income']);
-                    $this->savelog($data);
+                    if($data['income'] > 0 && $this->isdi($val['fuid'])){
+                        $data['username'] = "一级下线回馈奖";
+                        $data['tel'] = $val['tel'];
+                        $this->addniu($val['fuid'], $data['income']);
+                        $this->savelog($data);
+                    }
+
                 }
                 // 二级
                 if($val['two']){
                     $data['income'] =  bcmul($allimcomes,0.03,2);
                     $data['userid'] = $val['two'];
-                    $this->addmoney($val['two'], $data['income']);
-                    $this->savelog($data);
+                    $data['username'] = "二级下线回馈奖";
+                    $data['tel'] = $val['tel'];
+                    if($data['income'] > 0 && $this->isdi($val['two'])){
+                        $this->addniu($val['two'], $data['income']);
+                        $this->savelog($data);
+                    }
+
                 }
                 // 三级
                 if($val['three']){
                     $data['income'] =  bcmul($allimcomes,0.03,2);
                     $data['userid'] = $val['three'];
-                    $this->addmoney($val['three'], $data['income']);
-                    $this->savelog($data);
+                    $data['username'] = "三级下线回馈奖";
+                    $data['tel'] = $val['tel'];
+                    if($data['income'] > 0 && $this->isdi($val['three'])){
+                        $this->addniu($val['three'], $data['income']);
+                        $this->savelog($data);
+                    }
+
                 }
 
                 // 四级
                 if($val['four']){
                     $data['income'] =  bcmul($allimcomes,0.01,2);
                     $data['userid'] = $val['four'];
-                    $this->addmoney($val['four'], $data['income']);
-                    $this->savelog($data);
+                    $data['username'] = "四级下线回馈奖";
+                    $data['tel'] = $val['tel'];
+                    if($data['income'] > 0 && $this->isdi($val['four'])){
+                        $this->addniu($val['four'], $data['income']);
+                        $this->savelog($data);
+                    }
+
                     // 五到八
                     $fiveinfo = M("menber")->where(array('uid'=>$val['four']))->find();
                     // 五
                     if($fiveinfo['fuid']){
                         $data['income'] =  bcmul($allimcomes,0.01,2);
                         $data['userid'] =$fiveinfo['fuid'];
-                        $this->addmoney($fiveinfo['fuid'], $data['income']);
-                        $this->savelog($data);
+                        $data['username'] = "五级下线回馈奖";
+                        $data['tel'] = $val['tel'];
+                        if($data['income'] > 0 && $this->isdi($fiveinfo['fuid'])){
+                            $this->addniu($fiveinfo['fuid'], $data['income']);
+                            $this->savelog($data);
+                        }
                     }
                     // 六
                     if($fiveinfo['two']){
                         $data['income'] =  bcmul($allimcomes,0.01,2);
                         $data['userid'] =$fiveinfo['two'];
-                        $this->addmoney($fiveinfo['two'], $data['income']);
-                        $this->savelog($data);
+                        $data['username'] = "六级下线回馈奖";
+                        $data['tel'] = $val['tel'];
+                        if($data['income'] > 0 && $this->isdi($fiveinfo['two'])){
+                            $this->addniu($fiveinfo['two'], $data['income']);
+                            $this->savelog($data);
+                        }
+
                     }
                     // 七
                     if($fiveinfo['three']){
                         $data['income'] =  bcmul($allimcomes,0.01,2);
                         $data['userid'] =$fiveinfo['three'];
-                        $this->addmoney($fiveinfo['three'], $data['income']);
-                        $this->savelog($data);
+                        $data['username'] = "七级下线回馈奖";
+                        $data['tel'] = $val['tel'];
+                        if($data['income'] > 0 && $this->isdi($fiveinfo['three'])){
+                            $this->addniu($fiveinfo['three'], $data['income']);
+                            $this->savelog($data);
+                        }
+
                     }
                     // 八
                     if($fiveinfo['four']){
                         $data['income'] =  bcmul($allimcomes,0.01,2);
                         $data['userid'] =$fiveinfo['four'];
-                        $this->addmoney($fiveinfo['four'], $data['income']);
-                        $this->savelog($data);
+                        $data['username'] = "八级下线回馈奖";
+                        $data['tel'] = $val['tel'];
+                        if($data['income'] > 0 && $this->isdi($fiveinfo['four'])){
+                            $this->addniu($fiveinfo['four'], $data['income']);
+                            $this->savelog($data);
+                        }
                     }
                 }
             }
+
         }
 
         echo 'success';
+    }
+
+
+    private function isdi($uid){
+        $logs =M("orderlog")->where(array('userid'=>$uid,'type'=>1))->find();
+        if($logs['logid']){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    /**
+     * 牛气奖
+     * @param $uid
+     * @param $money
+     */
+    private function addniu($uid, $money)
+    {
+        $menber = M("menber");
+        $userinfos = $menber->where(array('uid' => $uid))->select();
+        $afterincom = bcadd($userinfos[0]['niuqi'], $money, 2);
+        $menber->where(array('uid' => $uid))->save(array('niuqi' => $afterincom));
     }
 
     /**
@@ -259,8 +320,11 @@ class UserController extends Controller
     {
         $menber = M("menber");
         $userinfos = $menber->where(array('uid' => $uid))->select();
-        $afterincom = bcadd($userinfos[0]['chargebag'], $money, 2);
-        $menber->where(array('uid' => $uid))->save(array('chargebag' => $afterincom));
+        $bashi =bcmul($money,0.8,2);
+        $chargebag = bcadd($userinfos[0]['chargebag'], $bashi, 2);
+        $twos =bcmul($money,0.2,2);
+        $dongbag = $afterincom = bcadd($userinfos[0]['dongbag'], $twos, 2);
+        $menber->where(array('uid' => $uid))->save(array('chargebag' => $chargebag,'dongbag'=>$dongbag));
     }
 
     /**

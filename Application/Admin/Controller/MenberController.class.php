@@ -115,6 +115,13 @@ class MenberController extends CommonController {
             }
             $data =$_POST;
             $data['chargebag'] = '0';
+            $data['addtime'] = time();
+            $data['addymd'] =date("Y-m-d H:i:s",time());
+            if($_POST['fuid']){
+                $data['two'] = $fuids[0]['fuid'];
+                $data['three'] = $fuids[0]['two'];
+                $data['four'] = $fuids[0]['three'];
+            }
             $uid =  $menber->add($data);
 
             if($fids){
