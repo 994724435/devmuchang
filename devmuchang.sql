@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-11-24 14:27:42
+Date: 2017-11-25 11:19:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -93,50 +93,20 @@ CREATE TABLE `p_incomelog` (
   `commitid` varchar(64) DEFAULT '1',
   `weixin` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=575 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=584 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_incomelog
 -- ----------------------------
-INSERT INTO `p_incomelog` VALUES ('536', '12', '6', '积分挂买', '2017-10-28', '1509150223', '1', '3', '100', '', 'lihailong', '13217620979', '20171028082417665', '三大发送地方');
-INSERT INTO `p_incomelog` VALUES ('537', '12', '6', '积分挂买', '2017-10-28', '1509150223', '2', '1', '100', '', 'lihailong', '13217620979', '20171028082417665', '三大发送地方');
-INSERT INTO `p_incomelog` VALUES ('538', '12', '5', '积分挂买', '2017-10-28', '1509150504', '1', '1', '200', '', 'asfasdfasfd', '1232131231', '20171028082847210', 'asdfasdf');
-INSERT INTO `p_incomelog` VALUES ('539', '12', '5', '积分挂买', '2017-10-28', '1509150504', '2', '3', '200', '', 'asfasdfasfd', '1232131231', '20171028082847210', 'asdfasdf');
-INSERT INTO `p_incomelog` VALUES ('540', '5', '2', '注册下级', '2017-10-28', '1509173730', '25', '1', '100', '', null, '18883287645', '1', null);
-INSERT INTO `p_incomelog` VALUES ('541', '1', '1', '注册收入', '2017-10-28', '1509173730', '1', '25', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('542', '7', '0', '积分提现', '2017-10-28', '1509174245', '1', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('543', '8', '2', '积分转账', '2017-10-28', '1509175404', '25', '1', '110.00', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('544', '8', '1', '积分转账', '2017-10-28', '1509175404', '1', '25', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('545', '12', '0', '积分挂买', '2017-10-28', '1509175571', '1', '1', '30', '', 'sadfasfda', '1234123412', '', 'safda');
-INSERT INTO `p_incomelog` VALUES ('546', '6', '2', '下单购买', '2017-10-28', '1509175898', '1', '1', '200', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('547', '6', '2', '下单购买', '2017-10-28', '1509178426', '1', '1', '200', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('548', '10', '1', '分红收益', '2017-10-28', '1509178614', '5', '1', '150', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('549', '10', '1', '分红收益', '2017-10-28', '1509178614', '1', '25', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('550', '10', '1', '分红收益', '2017-10-28', '1509178624', '5', '1', '150', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('551', '10', '1', '分红收益', '2017-10-28', '1509178624', '1', '25', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('552', '12', '0', '积分挂买', '2017-10-31', '1509451520', '1', '1', '100', '', '234234234', '1231231', '', '21321');
-INSERT INTO `p_incomelog` VALUES ('553', '5', '2', '注册下级', '2017-10-31', '1509451820', '26', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('554', '1', '1', '注册收入', '2017-10-31', '1509451820', '1', '26', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('555', '5', '2', '注册下级', '2017-10-31', '1509451971', '27', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('556', '1', '1', '注册收入', '2017-10-31', '1509451971', '1', '27', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('557', '5', '2', '注册下级', '2017-10-31', '1509452046', '28', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('558', '1', '1', '注册收入', '2017-10-31', '1509452046', '1', '28', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('559', '5', '2', '注册下级', '2017-10-31', '1509452174', '29', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('560', '1', '1', '注册收入', '2017-10-31', '1509452174', '1', '29', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('561', '5', '2', '注册下级', '2017-10-31', '1509452643', '30', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('562', '1', '1', '注册收入', '2017-10-31', '1509452643', '1', '30', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('563', '10', '1', '分红收益', '2017-11-01', '1509538519', '5', '1', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('564', '10', '1', '分红收益', '2017-11-01', '1509538519', '1', '25', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('565', '10', '1', '分红收益', '2017-11-01', '1509538519', '1', '26', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('566', '10', '1', '分红收益', '2017-11-01', '1509538519', '1', '27', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('567', '11', '1', '动态收益', '2017-11-01', '1509538519', '27', '1', '1.50', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('568', '10', '1', '分红收益', '2017-11-01', '1509538519', '1', '28', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('569', '10', '1', '分红收益', '2017-11-01', '1509538519', '1', '29', '30', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('570', '11', '1', '动态收益', '2017-11-01', '1509538519', '29', '1', '1.50', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('571', '5', '2', '注册下级', '2017-11-01', '1509541972', '31', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('572', '1', '1', '注册收入', '2017-11-01', '1509541972', '1', '31', '1', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('573', '5', '2', '注册下级', '2017-11-01', '1509542076', '32', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('574', '1', '1', '注册收入', '2017-11-01', '1509542076', '1', '32', '1', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('583', '6', '2', '购买黑牦牛', '2017-11-25', '1511579454', '69', '1', '5000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('582', '6', '2', '购买黑牦牛', '2017-11-25', '1511579267', '68', '1', '5000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('581', '6', '2', '购买母牦牛', '2017-11-25', '1511579211', '67', '1', '10000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('580', '6', '2', '购买幼崽牦牛', '2017-11-25', '1511579202', '66', '1', '1000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('579', '6', '2', '购买幼崽牦牛', '2017-11-25', '1511579197', '65', '1', '1000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('578', '6', '2', '购买黑牦牛', '2017-11-25', '1511578426', '64', '1', '5000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('577', '6', '2', '购买幼崽牦牛', '2017-11-25', '1511578339', '63', '1', '1000', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('575', '6', '2', '下单购买', '2017-11-25', '1511576598', '1', '1', '400', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('576', '6', '2', '购买地', '2017-11-25', '1511578065', '62', '1', '100', '', null, null, '1', null);
 
 -- ----------------------------
 -- Table structure for `p_login`
@@ -169,7 +139,7 @@ CREATE TABLE `p_menber` (
   `tel` varchar(64) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `type` int(4) DEFAULT '1' COMMENT '1普通 2 3 4',
-  `dongbag` varchar(50) DEFAULT '0' COMMENT '股份',
+  `dongbag` varchar(50) DEFAULT '0' COMMENT '商城积分',
   `jingbag` varchar(50) DEFAULT '0' COMMENT '静态钱包',
   `fuid` int(11) DEFAULT '0' COMMENT '注册上家',
   `fuids` varchar(1000) DEFAULT NULL COMMENT '上家',
@@ -179,7 +149,7 @@ CREATE TABLE `p_menber` (
   `addtime` int(12) DEFAULT NULL,
   `addymd` date DEFAULT NULL,
   `pwd2` varchar(255) NOT NULL,
-  `chargebag` varchar(50) DEFAULT '0' COMMENT '积分',
+  `chargebag` varchar(50) DEFAULT '0' COMMENT '个人钱包',
   `realname` varchar(100) DEFAULT NULL COMMENT '真实姓名',
   `zhifubao` varchar(100) DEFAULT NULL COMMENT '支付宝账号',
   `zhifubaoname` varchar(100) DEFAULT NULL COMMENT '支付宝姓名',
@@ -196,7 +166,7 @@ CREATE TABLE `p_menber` (
 -- ----------------------------
 -- Records of p_menber
 -- ----------------------------
-INSERT INTO `p_menber` VALUES ('1', '100', '1', '100', null, '1', '5', '0', '0', '1,', null, '0', '0', null, null, '1', '23.00', 'fsda', '1121', '121', '12121', null, null, null, '2', '0', '30');
+INSERT INTO `p_menber` VALUES ('1', '100', '1', '100', null, '1', '4500.00', '0', '0', '1,', null, '0', '0', null, null, '1', '10000.00', 'fsda', '1121', '121', '12121', null, null, null, '2', '0', '30');
 INSERT INTO `p_menber` VALUES ('2', '101', '1', '101', null, '1', '0', '0', '1', '1,2,', null, '0', '0', '1502892880', '2017-08-16', '1', '881.50', null, null, null, null, null, null, null, '1', '0', '14');
 INSERT INTO `p_menber` VALUES ('3', '102', '1', '102', null, '1', '0', '174', '1', '1,3,', null, '0', '0', '1502893254', '2017-08-16', '1', '300.00', null, null, null, null, null, null, null, '2', '0', '14');
 INSERT INTO `p_menber` VALUES ('22', '18883287644', '1', '18883287644', null, '1', '0', '0', '3', '1,3,22,', null, '0', '0', '1508940409', '2017-10-25', '1', '732.40', null, null, null, null, null, null, null, '0', '0', '0');
@@ -247,19 +217,27 @@ CREATE TABLE `p_orderlog` (
   `state` int(1) NOT NULL DEFAULT '0' COMMENT '0待支付 1收益中 2已完成',
   `orderid` varchar(128) NOT NULL COMMENT '订单id',
   `addtime` int(12) DEFAULT NULL,
-  `num` int(5) DEFAULT NULL COMMENT '公排数量 购买数量',
+  `num` int(5) DEFAULT NULL COMMENT '购买数量',
   `price` varchar(40) DEFAULT NULL COMMENT '购买单价',
   `totals` varchar(40) DEFAULT NULL,
   `addymd` date DEFAULT NULL,
-  `type` int(2) DEFAULT '1' COMMENT '1买地  2 1000买幼崽 3 成年5000 4母牦牛10000',
+  `type` int(2) DEFAULT '1' COMMENT '1买地  2 1000买幼崽 3 成年5000 4母牦牛10000  10买商城物品',
   `option` varchar(1000) DEFAULT NULL COMMENT '其他说明',
   PRIMARY KEY (`logid`)
-) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_orderlog
 -- ----------------------------
-INSERT INTO `p_orderlog` VALUES ('60', '1', '3', '钱付叁号', '200', '1', '1', '1509178426', '1', '200', '200', '2017-10-28', '1', '重庆合成,13649588123,李华,534535353');
+INSERT INTO `p_orderlog` VALUES ('61', '1', '3', '钱付叁号', '100', '1', '1511576598', '1511576598', '2', '200', '400', '2017-11-25', '10', '地址 1,admin,13000000001,999999');
+INSERT INTO `p_orderlog` VALUES ('62', '1', '1', '地', '100', '1', '1511578065', '1511578065', '1', '100', '100', '2017-11-25', '1', '');
+INSERT INTO `p_orderlog` VALUES ('63', '1', '2', '幼崽牦牛', '100', '1', '1511578339', '1511578339', '1', '1000', '1000', '2017-11-25', '2', '');
+INSERT INTO `p_orderlog` VALUES ('64', '1', '3', '黑牦牛', '100', '1', '1511578426', '1511578426', '1', '5000', '5000', '2017-11-25', '3', '');
+INSERT INTO `p_orderlog` VALUES ('65', '1', '2', '幼崽牦牛', '100', '1', '1511579197', '1511579197', '1', '1000', '1000', '2017-11-25', '2', '');
+INSERT INTO `p_orderlog` VALUES ('66', '1', '2', '幼崽牦牛', '100', '1', '1511579202', '1511579202', '1', '1000', '1000', '2017-11-25', '2', '');
+INSERT INTO `p_orderlog` VALUES ('67', '1', '4', '母牦牛', '100', '1', '1511579211', '1511579211', '1', '10000', '10000', '2017-11-25', '4', '');
+INSERT INTO `p_orderlog` VALUES ('68', '1', '3', '黑牦牛', '100', '1', '1511579267', '1511579267', '1', '5000', '5000', '2017-11-25', '3', '');
+INSERT INTO `p_orderlog` VALUES ('69', '1', '3', '黑牦牛', '100', '1', '1511579454', '1511579454', '1', '5000', '5000', '2017-11-25', '3', '');
 
 -- ----------------------------
 -- Table structure for `p_product`

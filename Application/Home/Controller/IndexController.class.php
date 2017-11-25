@@ -14,46 +14,116 @@ class IndexController extends CommonController {
 //	}
    //主页
 	public function index(){
-		$article =M('article');
-		$intro= $article->order('aid DESC')->where(array('type'=>1))->select();
-		$this->assign('intro',$intro[0]);
+		$pro =M('product');
+		$prolist= $pro->order('id DESC')->where(array('state'=>1))->select();
+		// 牛信息
+        $you = M("orderlog")->where(array('userid'=>session('uid'),'state'=>1,'type'=>2))->count();
+        $hei = M("orderlog")->where(array('userid'=>session('uid'),'state'=>1,'type'=>3))->count();
+        $mu = M("orderlog")->where(array('userid'=>session('uid'),'state'=>1,'type'=>4))->count();
+        $income = M("incomelog")->where(array('userid'=>session('uid')))->select();
+
+        $this->assign('you',$you);
+        $this->assign('hei',$hei);
+        $this->assign('mu',$mu);
+		$this->assign('list',$prolist);
+        $this->assign('income',$income);
 		$this->display();
 	}
 
-    //列表
-    public function shop(){
-        $article =M('product');
-        $intro= $article->order('id DESC')->where(array('type'=>1))->select();
-        $this->assign('intro',$intro);
-        $this->display();
+	private function getniuinfo($id){
+	    if($id ==1){
+	        return array('name'=>'地','price'=>100,'type'=>1,'num'=>1);
+        }elseif ($id ==2){
+            return array('name'=>'幼崽牦牛','price'=>1000,'type'=>2,'num'=>5);
+        }elseif ($id ==3){
+            return array('name'=>'黑牦牛','price'=>5000,'type'=>3,'num'=>3);
+        }elseif ($id ==4){
+            return array('name'=>'母牦牛','price'=>10000,'type'=>4,'num'=>2);
+        }else{
+            return 0;
+        }
     }
 
-    //详情
-    public function detail(){
-        $article =M('product');
-        $intro= $article->where(array('id'=>$_GET['id']))->find();
-        if($_POST['num']){
-            $isbuy = M("orderlog")->where(array('userid'=>session('uid')))->find();
-            if($isbuy['userid']){
-                echo "<script>alert('您已经购买过商品');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
-                echo "</script>";
-                exit;
-            }
+    //买地买牛
+    public function buyniu(){
+        $users = M("menber")->where(array('uid'=>session('uid')))->find();
+        $goodinfo =$this->getniuinfo($_GET['id']);
+        if($goodinfo ==0){
+            echo "<script>alert('系统异常');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+            echo "</script>";
+            exit;
+        }
 
+        $count = M("orderlog")->where(array('userid'=>session('uid'),'type'=>$goodinfo['type']))->count();
+        if($count >= $goodinfo['num']){
+            $msg = $goodinfo['name']." 最多购买".$goodinfo['num']."个";
+            echo "<script>alert('".$msg."');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+            echo "</script>";
+            exit;
+        }
+
+        $pro = $goodinfo;
+        $allmoney =$pro['price'];
+        if($users['chargebag'] < $allmoney){
+            echo "<script>alert('账户余额不足');";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+            echo "</script>";
+            exit;
+        }
+
+        $order['userid'] =session('uid');
+        $order['productid'] =$_GET['id'];
+        $order['productname'] =$pro['name'];
+        $order['productmoney'] =$users['name'];
+        $order['state'] = 1;
+        $order['type'] = $pro['type'];
+        $order['orderid'] = time();
+        $order['addtime'] = time();
+        $order['addymd'] = date("Y-m-d",time());
+        $order['num'] = 1;
+        $order['price'] =$pro['price'];
+        $order['totals'] =$allmoney;
+        $order['option'] ='';
+        if($allmoney > 0){
+            $logid =  M("orderlog")->add($order);
+        }
+
+        $income =M('incomelog');
+        $data['type'] =6;
+        $data['state'] =2;
+        $data['reson'] ='购买'.$pro['name'];
+        $data['addymd'] =date('Y-m-d',time());
+        $data['addtime'] =time();
+        $data['orderid'] =$logid;
+        $data['userid'] =session('uid');
+        $data['income'] =$allmoney;
+        if($pro['price'] > 0){
+            $income->add($data);
+        }
+
+        $menber = M("menber");
+        $userinfo = $menber->where(array('uid'=>session('uid')))->find();
+        $chargebag = bcsub($userinfo['chargebag'],$allmoney,2);
+        $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag));
+
+        echo "<script>alert('购买成功');";
+        echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+        echo "</script>";
+        exit;
+    }
+
+    //买商品
+    public function buyproduct(){
+        $article =M('product');
+        if($_POST['num']){
             $users = M("menber")->where(array('uid'=>session('uid')))->find();
 
-            if($isbuy['userid']){
-                echo "<script>alert('您已经购买过商品');";
-                echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
-                echo "</script>";
-                exit;
-            }
-
-            $pro = M("product")->where(array('id'=>$_GET['id']))->find();
-
-            if($users['chargebag'] < $pro['price']){
-                echo "<script>alert('积分余额不足');";
+            $pro = M("product")->where(array('id'=>$_POST['goodsId']))->find();
+            $allmoney =bcmul($pro['price'],$_POST['num'],2);
+            if($users['dongbag'] < $allmoney){
+                echo "<script>alert('商城积分不足');";
                 echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
                 echo "</script>";
                 exit;
@@ -62,17 +132,18 @@ class IndexController extends CommonController {
             $order['userid'] =session('uid');
             $order['productid'] =$pro['id'] ;
             $order['productname'] =$pro['name'];
-            $order['productmoney'] =$pro['price'];
-            $order['states'] = 1;
-            $order['orderid'] = $_POST['num'];
+            $order['productmoney'] =$users['name'];
+            $order['state'] = 1;
+            $order['type'] = 10;
+            $order['orderid'] = time();
             $order['addtime'] = time();
             $order['addymd'] = date("Y-m-d",time());
             $order['num'] = $_POST['num'];
-            $order['prices'] =$pro['price'];
-            $order['totals'] =$pro['price'];
-            $order['option'] =$_POST['addr'].','.$_POST['tel'].','.$_POST['name'].','.$_POST['youbian'];
+            $order['price'] =$pro['price'];
+            $order['totals'] =$allmoney;
+            $order['option'] =$_POST['addr'].','.$_POST['username'].','.$_POST['tel'].','.$_POST['youbian'];
             if($_POST['num'] > 0){
-                M("orderlog")->add($order);
+              $logid =  M("orderlog")->add($order);
             }
 
             $income =M('incomelog');
@@ -81,34 +152,29 @@ class IndexController extends CommonController {
             $data['reson'] ='下单购买';
             $data['addymd'] =date('Y-m-d',time());
             $data['addtime'] =time();
-            $data['orderid'] =session('uid');
+            $data['orderid'] =$logid;
             $data['userid'] =session('uid');
-            $data['income'] =$pro['price'];
+            $data['income'] =$allmoney;
             if($pro['price'] > 0){
                 $income->add($data);
             }
+
             $menber = M("menber");
             $userinfo = $menber->where(array('uid'=>session('uid')))->find();
-            $chargebag = bcsub($userinfo['chargebag'],$pro['price'],2);
-            $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag));
-
-            if((int)$pro['price'] == 100){
-                $dongbag =bcadd($userinfo['dongbag'],1);
-                $menber->where(array('uid'=>session('uid')))->save(array('dongbag'=>$dongbag));
-            }
-            if((int)$pro['price'] == 200){
-                $dongbag =bcadd($userinfo['dongbag'],2);
-                $menber->where(array('uid'=>session('uid')))->save(array('dongbag'=>$dongbag));
-            }
-
+            $chargebag = bcsub($userinfo['dongbag'],$allmoney,2);
+            $menber->where(array('uid'=>session('uid')))->save(array('dongbag'=>$chargebag));
 
             echo "<script>alert('购买成功');";
             echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
             echo "</script>";
             exit;
+        }else{
+            echo "<script>";
+            echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+            echo "</script>";
+            exit;
         }
-        $this->assign('intro',$intro);
-        $this->display();
+
     }
 
 
