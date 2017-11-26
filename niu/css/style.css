@@ -1,8 +1,9 @@
-*{margin: 0;padding: 0;}
+*{margin: 0;padding: 0;font-size: 16px;}
 li{list-style: none;}
 .mui-bar-nav{box-shadow: none;-webkit-box-shadow: none; background: #5da200;}
 .mui-title,.mui-icon-left-nav {color: #fff;}
 .mui-icon-arrowleft,.mui-title,.mui-bar .mui-btn-nav.mui-pull-left{color:#fff;}
+button{border:none;outline: none;}
 .fr{float: right;}
 .shadow_mask {
     width: 100%;
@@ -132,3 +133,31 @@ table.group td:last-child{font-size: .24rem;}
 .mui-input-group, .mui-input-group:after {
     background: transparent;
 }
+
+
+/*注册*/
+.page{ padding:0 10px;}
+.main {padding: 15px 0 80px;}
+.main .item {margin-bottom: 10px;position: relative;width: 100%;}
+.main .item .txt-username,.main .item .txt-password,.main .item .txt-password ,.main .item .txt-password_PwdTwo,.main .item .txt-captcha{ text-indent:10px;}
+.main .item .txt-phone {text-indent:80px;}
+.main .item .txt-input {background: none repeat scroll 0 0 #fff;border: 1px solid #d7d7d7;border-radius:5px; color: #252525;font-size: 14px;height: 44px;width: 100%;margin-bottom:0;padding: 0;}
+.main .item-username .input-close {right: 7px;}
+
+.main .item-login-option .retrieve-password {float: right;text-align: right;width: 50%;}
+.main .item-login-option .retrieve-password a {color: #4eabe8;font-size: 15px;text-decoration: underline;}
+.main .item-login-other{}
+.main .item-login-other dt {color: #666;font-size: 14px; margin-bottom: 13px;}
+.main .item-login-other dd .qq {width: 20%;}
+.main .item-login-other dd a {float: left;}
+.main .item-login-other dd a span {display:block;height: 40px;overflow: hidden; width: 40px;}
+.ui-btn-wrap { padding-top:5px; padding-bottom:10px;}
+.ui-btn-lg {cursor:pointer;border-radius:5px;display: block;font-size: 14px;height: 40px;width: 100%; text-align:center;}
+.ui-btn-primary {background-clip: padding-box;background-color: #5da200;color: #fff;}
+.ui-btn-danger{background-clip: padding-box;background-color: #de3b8a;border-color: #de3b8a;color: #fff;}
+.main .item-captcha {margin-bottom: 10px;}
+.main .item-captcha .input-info {margin-bottom: 10px;}
+.main .item-captcha .input-close {right: 79px;}
+.main .item-captcha .captcha-img { border-left: 1px solid #d7d7d7;height: 25px; padding-left: 7px; position: absolute;right: 0;top: 9px;width: 79px;}
+.main .item-captcha .err-tips {color: #848689;font-size: 13px;margin: 13px 0 0px;}
+.main .item-captcha .err-tips a { color: #0052ce; text-decoration: underline;}
