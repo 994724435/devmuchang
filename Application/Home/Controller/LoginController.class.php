@@ -35,9 +35,9 @@ class LoginController extends Controller{
 
     public function reg(){
         session('uid',0);
+        $menber = M('menber');
         if($_POST){
-            $menber = M('menber');
-            if(!$_POST['tel'] || !$_POST['pwd'] || !$_POST['pwd2']){
+            if(!$_POST['tel'] || !$_POST['pwd'] || !$_POST['pwd2'] || !$_POST['yzm']){
                 echo "<script>alert('请将信息填写完整');</script>";
                 $this->display();
                 exit();
@@ -65,6 +65,14 @@ class LoginController extends Controller{
                 exit;
             }
 
+            // 验证码
+            $msg = M("message")->where(array('tel'=>$_POST['tel'],'state'=>1))->find();
+            if($msg['cont'] !== $_POST['yzm']){
+                echo "<script>alert('验证码不正确');";
+                echo "window.location.href='".__ROOT__."/index.php/Home/Login/reg';";
+                echo "</script>";
+                exit;
+            }
             $fid = $_GET['fid'];
             $data['name'] = $_POST['tel'];
             $data['pwd'] = $_POST['pwd'];
@@ -76,6 +84,7 @@ class LoginController extends Controller{
             $data['dongbag'] ='0';
             $data['jingbag'] = '0';
             $data['chargebag'] = '0';
+
             if($fid){
                 $data['fuid'] = $fid;
                 $fidUserinfo = $menber->where(array('uid'=>$fid))->select();
@@ -85,6 +94,9 @@ class LoginController extends Controller{
                     exit();
                 }
                 $fuids = $fidUserinfo[0]['fuids'];
+                $data['two'] = $fidUserinfo[0]['fuid'];
+                $data['three'] = $fidUserinfo[0]['two'];
+                $data['four'] = $fidUserinfo[0]['three'];
             }
 
             $userid = $menber->add($data);
@@ -103,8 +115,13 @@ class LoginController extends Controller{
             echo "<script>window.location.href='".__ROOT__."/index.php/Home/Index/index';</script>";
             exit();
         }
+        if($_GET['fid']) {
+            $fidUserinfo = $menber->where(array('uid' => $_GET['fid']))->find();
+            $this->assign('fuid',$fidUserinfo['tel']);
+        }
         $this->display();
     }
+
 
     /**
      * 1 正确 2 已发送 3 格式不正确 4,已经注册
@@ -141,9 +158,9 @@ class LoginController extends Controller{
         $options['accountsid']='2f140e7145f0391eb539a6eb230f0da2';
         $options['token']='62a4c1aaba735785bc665846cceeb279';
         $ucpass = new \Ucpaas($options);
-        $appId = "68ee46bbf4d841a69374e8113e8f9315";
+        $appId = "732e6276d98c489794f37a83de160d10";
         $to = $tel;
-        $templateId = "117490";
+        $templateId = "237452";
         $param=$data['cont'] ;
         $resmsg =$ucpass->templateSMS($appId,$to,$templateId,$param);
         session('messageEid',$data['session']);

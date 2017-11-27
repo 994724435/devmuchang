@@ -54,7 +54,7 @@ class UserController extends CommonController{
             $msg = "暂无信息";
         }
         $con['userid'] =session('uid');
-        $con['type'] = array('in','2,3,4');
+        $con['type'] = array('in','1,2,3,4');
         $con['state'] =1;
         $niu =M("orderlog")->where($con)->count();
 
@@ -70,6 +70,15 @@ class UserController extends CommonController{
 
         //剩下没返回的
         $left =bcsub ($allfan,$incomes,2);
+
+        // 牛气奖
+        $xiaoniuqi = M('incomelog')->where(array('userid'=>session('uid'),'type'=>4,'state'=>2))->sum('income');
+        if(!$xiaoniuqi){
+            $xiaoniuqi =0;
+        }
+        $sheng = bcsub($userinfo['niuqi'],$xiaoniuqi,2);
+        $this->assign('xiaoniuqi',$xiaoniuqi);
+        $this->assign('sheng',$sheng);
 
         $this->assign('allfan',$allfan);
         $this->assign('incomes',$incomes);

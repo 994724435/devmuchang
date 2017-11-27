@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-11-25 21:27:18
+Date: 2017-11-27 22:50:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -79,7 +79,7 @@ INSERT INTO `p_config` VALUES ('19', '最高体现金额', '1000', '最高体现
 DROP TABLE IF EXISTS `p_incomelog`;
 CREATE TABLE `p_incomelog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` int(11) DEFAULT '1' COMMENT '1收益 2充值 3静态提现  4动态体现  5 注册下级 6下单购买 7积分体现 8积分转账 9 回馈奖 10牧场收益 11 幼崽收益 12成年 13母牦牛',
+  `type` int(11) DEFAULT '1' COMMENT '1收益 2充值 3静态提现  4牛气奖  5 注册下级 6下单购买 7积分体现 8积分转账 9 回馈奖 10牧场收益 11 幼崽收益 12成年 13母牦牛',
   `state` int(11) DEFAULT '1' COMMENT '1收入   2支出 3失败',
   `reson` varchar(255) DEFAULT NULL COMMENT '原因',
   `addymd` date DEFAULT NULL,
@@ -93,16 +93,13 @@ CREATE TABLE `p_incomelog` (
   `commitid` varchar(64) DEFAULT '1',
   `weixin` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=646 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=654 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_incomelog
 -- ----------------------------
-INSERT INTO `p_incomelog` VALUES ('641', '6', '2', '购买地', '2017-11-25', '1511615934', '80', '1', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('642', '6', '2', '购买地', '2017-11-25', '1511616010', '81', '35', '100', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('643', '10', '1', '牧场收益', '2017-11-25', '1511616017', '0', '1', '20', '', null, null, '1', null);
-INSERT INTO `p_incomelog` VALUES ('644', '10', '1', '牧场收益', '2017-11-25', '1511616017', '0', '35', '20', '', '二级下线回馈奖', '102', '1', null);
-INSERT INTO `p_incomelog` VALUES ('645', '9', '1', '回馈奖', '2017-11-25', '1511616017', '35', '1', '0.60', '', '三级下线回馈奖', '103', '1', null);
+INSERT INTO `p_incomelog` VALUES ('652', '6', '2', '购买地', '2017-11-27', '1511789707', '85', '2', '100', '', null, null, '1', null);
+INSERT INTO `p_incomelog` VALUES ('653', '4', '1', '牛气奖', '2017-11-27', '1511789707', '85', '1', '9.00', '', null, null, '1', null);
 
 -- ----------------------------
 -- Table structure for p_login
@@ -156,17 +153,18 @@ CREATE TABLE `p_menber` (
   `isdelete` int(1) DEFAULT '0' COMMENT '0 未经用 1禁用',
   `niuqi` varchar(11) DEFAULT '0' COMMENT '牛气奖',
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_menber
 -- ----------------------------
-INSERT INTO `p_menber` VALUES ('1', '100', '1', '100', null, '1', '4.00', '0', '0', '1,', null, '0', '0', null, null, '1', '16.00', 'fsda', '1121', '121', '12121', null, null, null, '0', '0.60');
-INSERT INTO `p_menber` VALUES ('2', '101', '1', '101', null, '1', '0', '0', '1', '1,2,', null, '0', '0', '1502892880', '2017-08-16', '1', '0', null, null, null, null, null, null, null, '0', '0');
+INSERT INTO `p_menber` VALUES ('1', '100', '1', '100', null, '1', '0', '0', '0', '1,', null, '0', '0', null, null, '1', '0.30', 'fsda', '1121', '121', '12121', null, null, null, '0', '19.20');
+INSERT INTO `p_menber` VALUES ('2', '101', '1', '101', null, '1', '4.00', '0', '1', '1,2,', null, '0', '0', '1502892880', '2017-08-16', '1', '716.00', null, null, null, null, null, null, null, '0', '0');
 INSERT INTO `p_menber` VALUES ('34', '102', '1', '102', null, '1', '0', '0', '2', '1,2,34,', '1', '0', '0', null, null, '1', '0', null, null, null, null, null, null, null, '0', '0');
 INSERT INTO `p_menber` VALUES ('35', '103', '1', '103', null, '1', '4.00', '0', '34', '1,2,34,35,', '2', '1', '0', null, null, '1', '16.00', null, null, null, null, null, null, null, '0', '0');
 INSERT INTO `p_menber` VALUES ('36', '104', '1', '104', null, '1', '0', '0', '35', '1,2,34,35,36,', '34', '2', '1', null, null, '1', '0', null, null, null, null, null, null, null, '0', '0');
 INSERT INTO `p_menber` VALUES ('37', '105', '1', '105', null, '1', '0', '0', '36', '1,2,34,35,36,37,', '35', '34', '2', null, null, '1', '0', null, null, null, null, null, null, null, '0', '0');
+INSERT INTO `p_menber` VALUES ('38', '18883287644', '1', '18883287644', null, '1', '0', '0', '0', '38,', '0', '0', '0', '1511792471', '2017-11-27', '1', '0', null, null, null, null, null, null, null, '0', '0');
 
 -- ----------------------------
 -- Table structure for p_message
@@ -182,13 +180,14 @@ CREATE TABLE `p_message` (
   `date` date DEFAULT NULL,
   `state` int(1) DEFAULT '1' COMMENT '1有效  2 无效',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=gbk;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=gbk;
 
 -- ----------------------------
 -- Records of p_message
 -- ----------------------------
-INSERT INTO `p_message` VALUES ('11', 'af814b00d0a1a723cfd2773f998c85c3', '7056', '18883287644', null, '1502616589', '2017-08-13', '1');
+INSERT INTO `p_message` VALUES ('11', 'af814b00d0a1a723cfd2773f998c85c3', '7056', '188832876441', null, '1502616589', '2017-08-13', '1');
 INSERT INTO `p_message` VALUES ('12', '6d5975dfcd0b523497d7e09fcbb01003', '2876', '15538867970', null, '1502616778', '2017-08-13', '1');
+INSERT INTO `p_message` VALUES ('13', '30cdaa5bc1b5618d7e824e7fbae56b57', '1936', '18883287644', null, '1511792183', '2017-11-27', '1');
 
 -- ----------------------------
 -- Table structure for p_orderlog
@@ -210,13 +209,12 @@ CREATE TABLE `p_orderlog` (
   `type` int(2) DEFAULT '1' COMMENT '1买地  2 1000买幼崽 3 成年5000 4母牦牛10000  10买商城物品',
   `option` varchar(1000) DEFAULT NULL COMMENT '其他说明',
   PRIMARY KEY (`logid`)
-) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_orderlog
 -- ----------------------------
-INSERT INTO `p_orderlog` VALUES ('80', '1', '1', '地', '100', '1', '1511615934', '1511615934', '1', '100', '100', '2017-11-25', '1', '');
-INSERT INTO `p_orderlog` VALUES ('81', '35', '1', '地', '103', '1', '1511616010', '1511616010', '1', '100', '100', '2017-11-25', '1', '');
+INSERT INTO `p_orderlog` VALUES ('85', '2', '1', '地', '101', '1', '1511789707', '1511789707', '1', '100', '100', '2017-11-27', '1', '');
 
 -- ----------------------------
 -- Table structure for p_product

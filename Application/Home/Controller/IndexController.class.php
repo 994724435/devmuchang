@@ -85,6 +85,17 @@ class IndexController extends CommonController {
             exit;
         }
 
+        if($goodinfo['type'] > 1){
+          $dicount =  M("orderlog")->where(array('userid'=>session('uid'),'type'=>1))->select();
+          if(!$count[0]){
+              $msg = "买牛必须先购买牧场";
+              echo "<script>alert('".$msg."');";
+              echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
+              echo "</script>";
+              exit;
+          }
+        }
+
         $pro = $goodinfo;
         $allmoney =$pro['price'];
         if($users['chargebag'] < $allmoney){
@@ -129,11 +140,53 @@ class IndexController extends CommonController {
         $chargebag = bcsub($userinfo['chargebag'],$allmoney,2);
         $menber->where(array('uid'=>session('uid')))->save(array('chargebag'=>$chargebag));
 
+        // 处理推荐奖
+        $addmoney = bcmul($pro['price'],0.06,2);
+        $addmoney =bcmul($addmoney,1.5,2);
+        $data['type'] =4;
+        $data['state'] =1;
+        $data['reson'] ='牛气奖';
+        $data['addymd'] =date('Y-m-d',time());
+        $data['addtime'] =time();
+        $data['orderid'] =$logid;
+        $data['income'] =$addmoney;
+
+        if($userinfo['fuid']){
+            $data['userid'] =$userinfo['fuid'];
+            $income->add($data);
+            $this->addniu($userinfo['fuid'],$addmoney);
+        }
+        if($userinfo['two']){
+            $data['userid'] =$userinfo['two'];
+            $income->add($data);
+            $this->addniu($userinfo['two'],$addmoney);
+        }
+        if($userinfo['three']){
+            $data['userid'] =$userinfo['three'];
+            $income->add($data);
+            $this->addniu($userinfo['three'],$addmoney);
+        }
+
         echo "<script>alert('购买成功');";
         echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
         echo "</script>";
         exit;
     }
+
+    /**
+     * 牛气奖
+     * @param $uid
+     * @param $money
+     */
+    private function addniu($uid, $money)
+    {
+        $menber = M("menber");
+        $userinfos = $menber->where(array('uid' => $uid))->select();
+        $money =bcmul($money,1.5,2);
+        $afterincom = bcadd($userinfos[0]['niuqi'], $money, 2);
+        $menber->where(array('uid' => $uid))->save(array('niuqi' => $afterincom));
+    }
+
 
     //买商品
     public function buyproduct(){

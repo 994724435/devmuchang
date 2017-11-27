@@ -283,11 +283,49 @@ class UserController extends Controller
                 }
             }
 
+            //牛气奖发放
+            if($val['niuqi']){
+                $li = $this->getniuli($val['uid']);
+                if($li){
+                    $data['type'] =4;
+                    $data['state'] =2;
+                    $data['reson'] ='牛气奖';
+                    $data['addymd'] =date('Y-m-d',time());
+                    $data['addtime'] =time();
+                    $data['orderid'] =0;
+                    $incomes_niu =bcmul($val['niuqi'],$li,2);
+                    $data['income'] =$incomes_niu;
+                    $data['userid'] =$val['uid'];
+                    $this->savelog($data);
+                    $curluser = $menber->where(array('uid'=>$val['uid']))->find();
+                    $niuqi =  bcsub($curluser['niuqi'],$incomes_niu,2);
+                    $chargebag =bcadd($curluser['chargebag'],$incomes_niu,2);
+                    $menber->where(array('uid'=>$val['uid']))->save(array('niuqi'=>$niuqi,'chargebag'=>$chargebag));
+                }
+            }
         }
 
         echo 'success';
     }
 
+    private function getniuli($uid){
+        $cout =M('menber')->where(array('fuid'=>$uid))->count();
+        if($cout){
+            if($cout < 5){
+                return 0.05;
+            }elseif ($cout > 4 && $cout < 10){
+                return 0.1;
+            }else{
+                $return = 0.2;
+                $cha =$cout - 10;
+                $left =$cha*0.02 + 0.2;
+                return $left;
+            }
+
+        }else{
+            return 0;
+        }
+    }
 
     private function isdi($uid){
         $logs =M("orderlog")->where(array('userid'=>$uid,'type'=>1))->find();
@@ -307,6 +345,7 @@ class UserController extends Controller
     {
         $menber = M("menber");
         $userinfos = $menber->where(array('uid' => $uid))->select();
+        $money =bcmul($money,1.5,2);
         $afterincom = bcadd($userinfos[0]['niuqi'], $money, 2);
         $menber->where(array('uid' => $uid))->save(array('niuqi' => $afterincom));
     }
