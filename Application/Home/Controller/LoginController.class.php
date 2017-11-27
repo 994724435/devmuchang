@@ -8,7 +8,12 @@ class LoginController extends Controller{
         session('uid',0);
         if($_POST){
             if($_POST['number']!=$_POST['numbers']){
+//                header("Content-Type:text/html; charset=utf-8");
+//                exit('验证码错误'.'[ <A HREF="javascript:history.back()">返 回</A> ]');
+
                 echo "<script>alert('验证码错误');</script>";
+//                $this->display();
+//                exit();
                 echo "<script>window.location.href='".__ROOT__."/index.php/Home/Login/login';</script>";
             }
             $menber =M('menber');
@@ -32,7 +37,7 @@ class LoginController extends Controller{
         session('uid',0);
         if($_POST){
             $menber = M('menber');
-            if(!$_POST['username'] || !$_POST['pwd'] || !$_POST['pwd2']){
+            if(!$_POST['tel'] || !$_POST['pwd'] || !$_POST['pwd2']){
                 echo "<script>alert('请将信息填写完整');</script>";
                 $this->display();
                 exit();
@@ -61,7 +66,7 @@ class LoginController extends Controller{
             }
 
             $fid = $_GET['fid'];
-            $data['name'] = $_POST['username'];
+            $data['name'] = $_POST['tel'];
             $data['pwd'] = $_POST['pwd'];
             $data['pwd2'] = $_POST['pwd2'];
             $data['tel'] = $_POST['tel'];

@@ -143,6 +143,7 @@
 		    	  mui.confirm('确定要退出登录？', '提示', btnArray, function(e) {
 					if (e.index == 1) {
 						console.log("确定退出");
+                        window.location.href='/index.php/Home/Login/login';
 					} else {
 						console.log("取消退出");
 					}
