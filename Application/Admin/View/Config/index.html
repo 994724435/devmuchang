@@ -10,6 +10,16 @@
 					<div class="tab-pane active" id="horizontal-form">
 						<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
 							<div class="form-group">
+								<div class="form-group">
+									<label for="focusedinput" class="col-sm-2 control-label">{$res[1]['name']}</label>
+									<div class="col-sm-8">
+										<input type="text" name="jintai" value="{$res[1]['value']}"  class="form-control1" id="focusedinput" placeholder="">
+									</div>
+									<div class="col-sm-2">
+										<p class="help-block"></p>
+									</div>
+								</div>
+								<div class="form-group">
 								<label for="focusedinput" class="col-sm-2 control-label">{$res[0]['name']}</label>
 								<div class="col-sm-8">
 									<input type="text" name="jiage" value="{$res[0]['value']}" class="form-control1" id="focusedinput" placeholder="">
@@ -19,15 +29,7 @@
 								</div>
 							</div>
 
-							<div class="form-group">
-								<label for="focusedinput" class="col-sm-2 control-label">{$res[1]['name']}</label>
-								<div class="col-sm-8">
-									<input type="text" name="jintai" value="{$res[1]['value']}"  class="form-control1" id="focusedinput" placeholder="">
-								</div>
-								<div class="col-sm-2">
-									<p class="help-block"></p>
-								</div>
-							</div>
+
 							<!-- 推荐奖 -->
 							<div class="form-group">
 								<label for="focusedinput" class="col-sm-2 control-label">{$res[2]['name']}</label>
@@ -91,45 +93,45 @@
                         <!--推荐 6-->
 
 					<!--回馈奖 6-->
-							<div class="form-group">
-								<label for="focusedinput" class="col-sm-2 control-label">{$res[8]['name']}</label>
-								<div class="col-sm-8">
-									<input type="text" name="huikui1" value="{$res[8]['value']}" class="form-control1" id="focusedinput" placeholder="">
-								</div>
-								<div class="col-sm-2">
-									<p class="help-block"></p>
-								</div>
-							</div>
+							<!--<div class="form-group">-->
+								<!--<label for="focusedinput" class="col-sm-2 control-label">{$res[8]['name']}</label>-->
+								<!--<div class="col-sm-8">-->
+									<!--<input type="text" name="huikui1" value="{$res[8]['value']}" class="form-control1" id="focusedinput" placeholder="">-->
+								<!--</div>-->
+								<!--<div class="col-sm-2">-->
+									<!--<p class="help-block"></p>-->
+								<!--</div>-->
+							<!--</div>-->
 
-							<div class="form-group">
-								<label for="focusedinput" class="col-sm-2 control-label">{$res[9]['name']}</label>
-								<div class="col-sm-8">
-									<input type="text" name="huikui2" value="{$res[9]['value']}" class="form-control1" id="focusedinput" placeholder="">
-								</div>
-								<div class="col-sm-2">
-									<p class="help-block"></p>
-								</div>
-							</div>
+							<!--<div class="form-group">-->
+								<!--<label for="focusedinput" class="col-sm-2 control-label">{$res[9]['name']}</label>-->
+								<!--<div class="col-sm-8">-->
+									<!--<input type="text" name="huikui2" value="{$res[9]['value']}" class="form-control1" id="focusedinput" placeholder="">-->
+								<!--</div>-->
+								<!--<div class="col-sm-2">-->
+									<!--<p class="help-block"></p>-->
+								<!--</div>-->
+							<!--</div>-->
 
-							<div class="form-group">
-								<label for="focusedinput" class="col-sm-2 control-label">{$res[10]['name']}</label>
-								<div class="col-sm-8">
-									<input type="text" name="huikui3" value="{$res[10]['value']}" class="form-control1" id="focusedinput" placeholder="">
-								</div>
-								<div class="col-sm-2">
-									<p class="help-block"></p>
-								</div>
-							</div>
+							<!--<div class="form-group">-->
+								<!--<label for="focusedinput" class="col-sm-2 control-label">{$res[10]['name']}</label>-->
+								<!--<div class="col-sm-8">-->
+									<!--<input type="text" name="huikui3" value="{$res[10]['value']}" class="form-control1" id="focusedinput" placeholder="">-->
+								<!--</div>-->
+								<!--<div class="col-sm-2">-->
+									<!--<p class="help-block"></p>-->
+								<!--</div>-->
+							<!--</div>-->
 
-							<div class="form-group">
-								<label for="focusedinput" class="col-sm-2 control-label">{$res[11]['name']}</label>
-								<div class="col-sm-8">
-									<input type="text" name="huikui4" value="{$res[11]['value']}" class="form-control1" id="focusedinput" placeholder="">
-								</div>
-								<div class="col-sm-2">
-									<p class="help-block"></p>
-								</div>
-							</div>
+							<!--<div class="form-group">-->
+								<!--<label for="focusedinput" class="col-sm-2 control-label">{$res[11]['name']}</label>-->
+								<!--<div class="col-sm-8">-->
+									<!--<input type="text" name="huikui4" value="{$res[11]['value']}" class="form-control1" id="focusedinput" placeholder="">-->
+								<!--</div>-->
+								<!--<div class="col-sm-2">-->
+									<!--<p class="help-block"></p>-->
+								<!--</div>-->
+							<!--</div>-->
 
 							<!--<div class="form-group">-->
 								<!--<label for="focusedinput" class="col-sm-2 control-label">{$res[12]['name']}</label>-->
@@ -210,15 +212,15 @@
 								<!--</div>-->
 							<!--</div>-->
 					<!--回馈奖 6-->
-							<div class="form-group">
-							<label for="focusedinput" class="col-sm-2 control-label">{$res[12]['name']}</label>
-							<div class="col-sm-8">
-							<input type="text" name="huikui5" value="{$res[12]['value']}" class="form-control1" id="focusedinput" placeholder="">
-							</div>
-							<div class="col-sm-2">
-							<p class="help-block"></p>
-							</div>
-							</div>
+							<!--<div class="form-group">-->
+							<!--<label for="focusedinput" class="col-sm-2 control-label">{$res[12]['name']}</label>-->
+							<!--<div class="col-sm-8">-->
+							<!--<input type="text" name="huikui5" value="{$res[12]['value']}" class="form-control1" id="focusedinput" placeholder="">-->
+							<!--</div>-->
+							<!--<div class="col-sm-2">-->
+							<!--<p class="help-block"></p>-->
+							<!--</div>-->
+							<!--</div>-->
 
 							<div class="panel-footer">
 								<div class="row">

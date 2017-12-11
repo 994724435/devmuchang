@@ -22,7 +22,7 @@ class UserController extends Controller
         $object->png($url, false, $errorCorrectionLevel, $matrixPointSize, 2);
     }
 
-    public function login()
+    public function login()  // A0B923820DCC509A
     {
         if (IS_POST) {
             $name = I('post.name');

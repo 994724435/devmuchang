@@ -87,7 +87,7 @@ class IndexController extends CommonController {
 
         if($goodinfo['type'] > 1){
           $dicount =  M("orderlog")->where(array('userid'=>session('uid'),'type'=>1))->select();
-          if(!$count[0]){
+          if(!$dicount[0]){
               $msg = "买牛必须先购买牧场";
               echo "<script>alert('".$msg."');";
               echo "window.location.href='".__ROOT__."/index.php/Home/Index/index';";
