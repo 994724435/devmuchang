@@ -12,18 +12,20 @@
 		    <table class="table">
 		      <thead>
 		        <tr style="text-align: center;">
-		           <h3> <span><a href="__ROOT__/index.php/Admin/Index/addproduct">添加产品</a></h3>
+		           <h3> <span><a href="__ROOT__/index.php/Admin/Index/addproduct">添加网站</a></h3>
 		        </tr>
 		        <tr>
-		          <th>编号</th>
-					<th>名称</th>
-		          <th style="width: 300px">描述</th>
-		          <th>logo</th>
-					<th>价格</th>
-					<th>每日收益</th>
-				  <th>每日出售量</th>
-					<th>状态</th>
-					<th>操作</th>
+		          <!--<th>编号</th>-->
+					<th>标题</th>
+		          <th>会议日期</th>
+					<th>会议简介</th>
+					<th>基本信息</th>
+				  <th>征文投稿</th>
+					<th>会议内容</th>
+					<th>参会注册</th>
+					<th>酒店交通</th>
+					<th>联系我们</th>
+					<th>基础操作</th>
 		        </tr>
 		      </thead>
 		      <tbody>	      
@@ -40,16 +42,18 @@
 					}
 		      	?>
 		        
-		          <th scope="row">{$v.id}</th>
-				  <th>{$v.name}</th>
-		          <th style="width: 300px">{$v.cont}</th>
-		          <th><img src="{$v.pic}" style="width: 100px;"></th>
-				  <th>{$v.price}</th>
-				  <th>{$v.daycome}</th>
-				  <th>{$v.daynum}</th>
-				   <th><if condition="$v.state eq 1">出售中<elseif condition="$v.state eq 2"/>已下架</if></th>
-				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/id/{$v.id}">修改</a>|<if condition="$v.state eq 1"><a href="javascript:if(confirm('确认下架吗?'))window.location='__ROOT__/index.php/Admin/Index/deleteproduct/id/{$v.id}'">下 架</a><elseif condition="$v.state eq 2"/><a href="javascript:if(confirm('确认上架吗?'))window.location='__ROOT__/index.php/Admin/Index/deleteproduct/id/{$v.id}'">上 架</a></if> </th>
-		        </tr>
+		          <!--<th scope="row">{$v.id}</th>-->
+				  <th>{$v.title}</th>
+				  <th>{$v.meetdate}</th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/1/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/2/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/3/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/4/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/5/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/6/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/type/7/id/{$v.id}">修改</a></th>
+				  <th><a href="__ROOT__/index.php/Admin/Index/editeproduct/id/{$v.id}">修改</a></th>
+				   </tr>
 		      	<?php $i++ ;?>
 		       </foreach>		      
 		      </tbody>

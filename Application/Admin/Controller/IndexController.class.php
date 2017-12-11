@@ -50,18 +50,13 @@ class IndexController extends CommonController {
                     $pic=$p.$img;
                 }
             }
-            $data['name'] =$_POST['name'];
-            $data['cont'] =$_POST['cont'];
-            $data['pic'] =__ROOT__.$pic;
-            $data['price'] =$_POST['price'];
-            $data['effectdays'] =$_POST['effectdays'];
-            $data['daycome'] =$_POST['daycome'];
-            $data['daynum'] =$_POST['daynum'];
-            $data['one'] =$_POST['one'];
-            $data['two'] =$_POST['two'];
+            $data =$_POST;
             $data['addtime'] =date('Y-m-d H:i:s',time());
-            $product =M('product');
+            $product =M('index');
             $result = $product->add($data);
+            if($pic){
+                $product->where(array('id'=>$result))->save(array('wxpic'=>$pic));
+            }
             if($result){
                 echo "<script>window.location.href = '".__ROOT__."/index.php/Admin/Index/addproduct';</script>";
             }else{
@@ -73,7 +68,7 @@ class IndexController extends CommonController {
     }
 
     public function productlist(){
-        $product =M('product');
+        $product =M('index');
         $result = $product->select();
         $this->assign('res',$result);
         $this->display();

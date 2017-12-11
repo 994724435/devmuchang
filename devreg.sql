@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2017-12-11 21:46:39
+Date: 2017-12-11 23:07:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -57,12 +57,15 @@ CREATE TABLE `p_index` (
   `reg` text COMMENT '参会注册',
   `hotel` text COMMENT '酒店交通',
   `contact` text COMMENT '联系我们',
+  `addtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_index
 -- ----------------------------
+INSERT INTO `p_index` VALUES ('1', '2016年河南省超声医学学术年会', '2017-12-07 00:00:00', '2017年10月28日-10月29日', '2017年09月10日', '2017年10月25日', '2017年10月27日', '444', null, null, null, null, null, null, null, null, '2017-12-11 22:39:17');
+INSERT INTO `p_index` VALUES ('2', '2017年河南省超声医学学术年会', '2017-12-01 00:00:00', '2017年10月28日-10月29日', '2017年09月10日', '2017年10月25日', '2017年10月27日', '河南省超声医学学术年会', '/Public/Uploads/2017-12-11/5a2e98fa0761f.png', null, null, null, null, null, null, null, '2017-12-11 22:40:58');
 
 -- ----------------------------
 -- Table structure for p_login
